@@ -1,6 +1,6 @@
 import nodeResolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
-import removeExports from "./rollup-plugin-remove-exports.js";
+// import removeExports from "./rollup/rollup-plugin-remove-exports.js";
 import pkg from "./package.json" assert { type: "json" };
 
 export default [
@@ -11,7 +11,13 @@ export default [
 			file: pkg.main,
 			format: "es",
 		},
-		plugins: [typescript({ declaration: true, declarationDir: "/dist" })],
+		plugins: [
+			typescript({
+				ignoreDeprecations: "5.0",
+				declaration: true,
+				declarationDir: "dist",
+			}),
+		],
 	},
 	{
 		input: "src/index.ts",
@@ -21,8 +27,12 @@ export default [
 		},
 		plugins: [
 			nodeResolve(),
-			typescript({ declaration: false, removeComments: true }),
-			removeExports(),
+			typescript({
+				ignoreDeprecations: "5.0",
+				declaration: false,
+				removeComments: true,
+			}),
+			// removeExports(),
 		],
 	},
 ];
