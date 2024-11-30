@@ -37,6 +37,7 @@ export function jsx<T extends ScriptUIElementTagName>(
 
 	if (type === "dialog") {
 		const options = props.options as _AddControlPropertiesWindow;
+		alert(`dialog: ${props.text}`);
 		const instance = new Window("dialog", text, bounds, options);
 		element = { instance, type, props };
 		parentStack.push(element);
