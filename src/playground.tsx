@@ -1,24 +1,15 @@
-import { jsx } from "./jsx";
+import { ScriptUIElements, jsx } from "./jsx";
 
-// example
-const buttonElement: JSX.Element = {
-	type: "button",
-	instance: new Window("dialog").add("button"),
-	props: {
-		text: "1",
-	},
-};
+const a = { text: "hello" } satisfies ScriptUIElements["dialog"];
+// ✅ <dialog> props object
 
-const buttonElementFn: JSX.Element = jsx("button", {
-	text: "1",
-});
+const b = jsx("dialog", { text: "hello" });
+// ✅ jsx(type: T, props: ScriptUIElements[T])
 
-const a = "button" satisfies JSX.Tag;
-// ^ this works
-const b = {
-	props: { active: true },
-	children: [],
-} satisfies JSX.IntrinsicElements["button"];
-// ^ this also works
-const t = <button></button>;
-// ^ this doesnt: "JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.ts(7026)"
+const c = <dialog text="hello"></dialog>;
+//             ⚠️ ^ Type '{ text: string; }' is not assignable to type '{ props: Partial<InstanceProps<typeof Window> & { options: _AddControlPropertiesWindow; }>; children?: ScriptUIElement[] | undefined; }'.
+//                   Property 'text' does not exist on type '{ props: Partial<InstanceProps<typeof Window> & { options: _AddControlPropertiesWindow; }>; children?: ScriptUIElement[] | undefined; }'.ts(2322)
+
+const d = <dialog props={{ text: "hello" }}></dialog>;
+//             😔 ^ it accepts a props object just fine, but we want to apply
+//                  the props as attributes on the jsx element!

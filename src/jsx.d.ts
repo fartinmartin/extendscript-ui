@@ -1,6 +1,6 @@
 import {
 	ScriptUIElement,
-	ScriptUIElementTagNameMap,
+	ScriptUIElementTagName,
 	ScriptUIElements,
 } from "./jsx";
 
@@ -11,7 +11,7 @@ declare global {
 		interface IntrinsicElements extends IntrinsicElementMap {}
 
 		type IntrinsicElementMap = {
-			[K in ScriptUIElementTagNameMap]: {
+			[K in ScriptUIElementTagName]: {
 				props: ScriptUIElements[K];
 				children?: ScriptUIElement[];
 			};

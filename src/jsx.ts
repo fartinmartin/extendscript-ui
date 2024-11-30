@@ -2,8 +2,8 @@ import { forEach } from "extendscript-ponyfills";
 import { InstanceProps } from "./types/es3-helpers";
 
 export type ScriptUIElement = {
-	type: ScriptUIElementTagNameMap;
-	props: ScriptUIElements[ScriptUIElementTagNameMap];
+	type: ScriptUIElementTagName;
+	props: ScriptUIElements[ScriptUIElementTagName];
 	children?: ScriptUIElement[];
 	instance?: Window | Panel | Button;
 };
@@ -20,12 +20,12 @@ export type ScriptUIElements = {
 	>;
 };
 
-export type ScriptUIElementTagNameMap = keyof ScriptUIElements;
+export type ScriptUIElementTagName = keyof ScriptUIElements;
 
 // A global or external stack to track the current parent context
 const parentStack: ScriptUIElement[] = [];
 
-export function jsx<T extends ScriptUIElementTagNameMap>(
+export function jsx<T extends ScriptUIElementTagName>(
 	type: T,
 	props: ScriptUIElements[T],
 	children: ScriptUIElement[] = []
