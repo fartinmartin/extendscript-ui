@@ -23,7 +23,7 @@ export type ScriptUIElements = {
 export type ScriptUIElementTagNameMap = keyof ScriptUIElements;
 
 // A global or external stack to track the current parent context
-let parentStack: ScriptUIElement[] = [];
+const parentStack: ScriptUIElement[] = [];
 
 export function jsx<T extends ScriptUIElementTagNameMap>(
 	type: T,

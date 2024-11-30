@@ -5,11 +5,11 @@
 		"moduleResolution": "node",
 		"noLib": true,
 		"strict": true,
-		"types": ["shared/ScriptUI.d.ts"],
-		"typeRoots": ["./node_modules/types-for-adobe/"],
+		"types": ["shared/ScriptUI.d.ts", "jsx.d.ts"],
+		"typeRoots": ["./node_modules/types-for-adobe/", "./src"],
 		"jsx": "react",
 		"jsxFactory": "jsx"
 	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "src/jsx.d.ts"],
+	"include": ["src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["dist"]
 }
