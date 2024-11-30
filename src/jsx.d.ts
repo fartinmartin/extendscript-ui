@@ -20,7 +20,7 @@ declare global {
 
 		interface Component {
 			(
-				props?: { [key: string]: any },
+				attributes?: { [key: string]: any },
 				children?: ScriptUIElement[]
 			): ScriptUIElement;
 		}

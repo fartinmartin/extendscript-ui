@@ -2,8 +2,8 @@ import { forEach } from "extendscript-ponyfills";
 import { InstanceProps } from "./types/es3-helpers";
 
 export type ScriptUIElement = {
-	type: ScriptUIElementTagName;
-	props: ScriptUIElements[ScriptUIElementTagName];
+	tagName: ScriptUIElementTagName;
+	attributes: ScriptUIElements[ScriptUIElementTagName];
 	children?: ScriptUIElement[];
 	instance?: Window | Panel | Button;
 };
@@ -26,20 +26,20 @@ export type ScriptUIElementTagName = keyof ScriptUIElements;
 const parentStack: ScriptUIElement[] = [];
 
 export function jsx<T extends ScriptUIElementTagName>(
-	type: T,
-	props: ScriptUIElements[T],
+	tagName: T,
+	attributes: ScriptUIElements[T],
 	children: ScriptUIElement[] = []
 ): ScriptUIElement {
-	alert(`creating: ${type}\n${props.toSource()}`);
+	alert(`creating: ${tagName}\n${attributes.toSource()}`);
 	let element: ScriptUIElement;
 
-	const { text, bounds } = props;
+	const { text, bounds } = attributes;
 
-	if (type === "dialog") {
-		const options = props.options as _AddControlPropertiesWindow;
-		alert(`dialog: ${props.text}`);
+	if (tagName === "dialog") {
+		const options = attributes.options as _AddControlPropertiesWindow;
+		alert(`dialog: ${attributes.text}`);
 		const instance = new Window("dialog", text, bounds, options);
-		element = { instance, type, props };
+		element = { instance, tagName: tagName, attributes: attributes };
 		parentStack.push(element);
 	} else {
 		const parent = parentStack[parentStack.length - 1];
@@ -55,24 +55,36 @@ export function jsx<T extends ScriptUIElementTagName>(
 
 		let instance: ScriptUIElement["instance"];
 
-		switch (type) {
+		switch (tagName) {
 			case "panel":
-				instance = parentInstance.add("panel", bounds, text, props.options);
+				instance = parentInstance.add(
+					"panel",
+					bounds,
+					text,
+					attributes.options
+				);
 				break;
 			case "button":
-				// @ts-expect-error
-				instance = parentInstance.add("button", bounds, text, props.options);
+				instance = parentInstance.add(
+					// @ts-expect-error
+					"button",
+					bounds,
+					text,
+					attributes.options
+				);
 				break;
 			default:
-				throw new Error(`Unsupported element type: ${type}`);
+				throw new Error(`Unsupported element type: ${tagName}`);
 		}
 
-		element = { instance, type, props };
+		element = { instance, tagName: tagName, attributes: attributes };
 	}
 
 	if (children.length > 0) {
 		parentStack.push(element);
-		forEach(children, (child) => jsx(child.type, child.props, child.children));
+		forEach(children, (child) =>
+			jsx(child.tagName, child.attributes, child.children)
+		);
 		parentStack.pop();
 	}
 
