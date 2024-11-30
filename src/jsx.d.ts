@@ -11,8 +11,7 @@ declare global {
 		interface IntrinsicElements extends IntrinsicElementMap {}
 
 		type IntrinsicElementMap = {
-			[K in ScriptUIElementTagName]: {
-				props: ScriptUIElements[K];
+			[K in ScriptUIElementTagName]: ScriptUIElements[K] & {
 				children?: ScriptUIElement[];
 			};
 		};

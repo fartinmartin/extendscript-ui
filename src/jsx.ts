@@ -30,16 +30,19 @@ export function jsx<T extends ScriptUIElementTagName>(
 	props: ScriptUIElements[T],
 	children: ScriptUIElement[] = []
 ): ScriptUIElement {
+	alert(`creating: ${type}\n${props.toSource()}`);
 	let element: ScriptUIElement;
 
 	const { text, bounds } = props;
 
 	if (type === "dialog") {
-		const instance = new Window("dialog", text, bounds); // props.options);
+		const options = props.options as _AddControlPropertiesWindow;
+		const instance = new Window("dialog", text, bounds, options);
 		element = { instance, type, props };
+		parentStack.push(element);
 	} else {
 		const parent = parentStack[parentStack.length - 1];
-		const parentInstance = parent.instance;
+		const parentInstance = parent?.instance;
 
 		if (!parent) {
 			throw new Error("Parent element is required for non-dialog elements");
@@ -66,7 +69,6 @@ export function jsx<T extends ScriptUIElementTagName>(
 		element = { instance, type, props };
 	}
 
-	// Handle children if there are any
 	if (children.length > 0) {
 		parentStack.push(element);
 		forEach(children, (child) => jsx(child.type, child.props, child.children));
