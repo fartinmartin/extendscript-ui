@@ -1,4 +1,4 @@
-import { forEach, map } from "extendscript-ponyfills";
+import { find, forEach, map } from "extendscript-ponyfills";
 import { InstanceProps } from "./types/es3-helpers";
 import { mapProps, capitalize, noop } from "./utils";
 
@@ -32,10 +32,10 @@ export function jsx<T extends ScriptUIElementTagName>(
 	attributes: ScriptUIElements[T],
 	...children: ScriptUIElement[]
 ): JSX.Element {
-	const id = `${tagName}_${idCounter++}`;
+	const id = getIdentifier(tagName, attributes);
 
 	if ("onClick" in attributes && attributes.onClick) {
-		eventHandlers[attributes.properties?.name ?? id] = attributes.onClick;
+		eventHandlers[id] = attributes.onClick;
 	}
 
 	const props = mapProps(
@@ -45,14 +45,7 @@ export function jsx<T extends ScriptUIElementTagName>(
 
 	const nodes = map(children, (child) => {
 		const childNodes = child.children ?? [];
-		let name = "";
-
-		if (child.attributes.properties && "name" in child.attributes.properties) {
-			name = `${child.attributes.properties.name}: `;
-		} else {
-			name = `${id}: `;
-		}
-
+		let name = `${getIdentifier(child.tagName, child.attributes)}: `;
 		return name + jsx(child.tagName, child.attributes, ...childNodes).spec;
 	}).join(",");
 
@@ -107,20 +100,30 @@ export function renderSpec(scriptUI: JSX.Element) {
 	};
 }
 
-function findElementsWithOnClick(root: JSX.Element): JSX.Element[] {
-	let result: JSX.Element[] = [];
+//
 
-	function traverse(element: ScriptUIElement) {
-		if ("onClick" in element.attributes) {
-			result.push(element as JSX.Element);
-		}
-		if (element.children) {
-			forEach(element.children, traverse);
-		}
+function getIdentifier<T extends ScriptUIElementTagName>(
+	tagName: T,
+	attributes: ScriptUIElements[T]
+) {
+	let name = "";
+
+	if (
+		attributes.properties &&
+		"name" in attributes.properties &&
+		attributes.properties.name
+	) {
+		name = attributes.properties.name;
+	} else {
+		name = `${tagName}_${idCounter++}`;
 	}
 
-	traverse(root);
-	return result;
+	attributes.properties = {
+		...(attributes.properties ?? {}),
+		name: name,
+	};
+
+	return name;
 }
 
 type Container = Window | Panel | Group | Tab;
