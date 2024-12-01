@@ -1,27 +1,28 @@
 import { jsx } from "./jsx";
 
+export function renderSpec(scriptUI: JSX.Element) {
+	// alert("spec:\n" + scriptUI.spec);
+	// @ts-ignore
+	const window = new Window(scriptUI.spec);
+	window.onResize = window.onResizing = function () {
+		this.layout.resize();
+	};
+	return window;
+}
+
 export const ui = () => (
-	<dialog
-		text="Alert Box Builder"
-		bounds={[100, 100, 400, 200]}
-		options={{ resizeable: true, closeButton: true }}
-	>
-		<button text="Test" bounds={[25, 15, 80, 30]} />
+	<dialog text="Alert Box Builder" properties={{ resizeable: true }}>
+		<group orientation={"row"}>
+			<panel orientation={"row"}>
+				<button text="Test" size={[100, 200]} />
+				<button text="Build" properties={{ name: "ok" }} />
+				<button text="Cancel" properties={{ name: "cancel" }} />
+			</panel>
+			<panel orientation={"column"}>
+				<button text="Test" />
+				<button text="Build" properties={{ name: "ok" }} />
+				<button text="Cancel" properties={{ name: "cancel" }} />
+			</panel>
+		</group>
 	</dialog>
 );
-
-{
-	/* <panel text="Build it" bounds={[25, 15, 355, 130]}>
-  <button text="Test" bounds={[25, 15, 80, 30]} />
-  <button
-    text="Build"
-    bounds={[100, 15, 80, 30]}
-    options={{ name: "ok" }}
-  />
-  <button
-    text="Cancel"
-    bounds={[185, 15, 80, 30]}
-    options={{ name: "cancel" }}
-  />
-</panel> */
-}

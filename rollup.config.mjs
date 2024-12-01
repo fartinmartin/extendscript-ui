@@ -6,6 +6,7 @@ import pkg from "./package.json" assert { type: "json" };
 export default [
 	{
 		input: "src/index.ts",
+		context: "this",
 		external: pkg.dependencies ? Object.keys(pkg.dependencies) : null,
 		output: {
 			file: pkg.main,
@@ -21,6 +22,7 @@ export default [
 	},
 	{
 		input: "src/index.ts",
+		context: "this",
 		output: {
 			file: `dist/jsx/${pkg.name}-v${pkg.version}.jsx`,
 			format: "cjs",

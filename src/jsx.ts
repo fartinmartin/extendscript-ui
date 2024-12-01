@@ -1,97 +1,90 @@
-import { forEach } from "extendscript-ponyfills";
+import { map } from "extendscript-ponyfills";
 import { InstanceProps } from "./types/es3-helpers";
+import { mapProps, uuid, capitalize } from "./utils";
 
 export type ScriptUIElement = {
 	tagName: ScriptUIElementTagName;
 	attributes: ScriptUIElements[ScriptUIElementTagName];
 	children?: ScriptUIElement[];
-	instance?: Window | Panel | Button;
 };
 
 export type ScriptUIElements = {
 	dialog: Partial<
-		InstanceProps<typeof Window> & { options: _AddControlPropertiesWindow }
+		InstanceProps<typeof Window> & {
+			properties: _AddControlPropertiesWindow;
+		}
 	>;
 	panel: Partial<
-		InstanceProps<typeof Panel> & { options: _AddControlPropertiesPanel }
+		InstanceProps<typeof Panel> & {
+			properties: _AddControlPropertiesPanel;
+		}
+	>;
+	group: Partial<
+		InstanceProps<typeof Group> & {
+			properties: _AddControlProperties;
+		}
 	>;
 	button: Partial<
-		InstanceProps<typeof Button> & { options: _AddControlProperties }
+		InstanceProps<typeof Button> & {
+			properties: _AddControlProperties;
+		}
 	>;
 };
 
 export type ScriptUIElementTagName = keyof ScriptUIElements;
 
-// A global or external stack to track the current parent context
-const parentStack: ScriptUIElement[] = [];
-
 export function jsx<T extends ScriptUIElementTagName>(
 	tagName: T,
 	attributes: ScriptUIElements[T],
-	children: ScriptUIElement[] = []
-): ScriptUIElement {
-	alert(`creating: ${tagName}\n${attributes.toSource()}`);
-	let element: ScriptUIElement;
+	...children: ScriptUIElement[]
+): JSX.Element {
+	const props = mapProps(
+		attributes,
+		(prop, value) => `${prop}: ${JSON.stringify(value)}`
+	).join(",");
 
-	const { text, bounds } = attributes;
+	const nodes = map(children, (child) => {
+		const childNodes = child.children ?? [];
+		let name = "";
 
-	if (tagName === "dialog") {
-		const options = attributes.options as _AddControlPropertiesWindow;
-		alert(`dialog: ${attributes.text}`);
-		const instance = new Window("dialog", text, bounds, options);
-		element = { instance, tagName: tagName, attributes: attributes };
-		parentStack.push(element);
-	} else {
-		const parent = parentStack[parentStack.length - 1];
-		const parentInstance = parent?.instance;
-
-		if (!parent) {
-			throw new Error("Parent element is required for non-dialog elements");
-		} else if (!parentInstance) {
-			throw new Error("Parent element must be instantiated");
-		} else if (!isContainer(parentInstance)) {
-			throw new Error("Parent element must be of Container type");
+		if (child.attributes.properties && "name" in child.attributes.properties) {
+			name = `${child.attributes.properties.name}: `;
+		} else {
+			name = `${uuid(child.tagName)}: `;
 		}
 
-		let instance: ScriptUIElement["instance"];
+		return name + jsx(child.tagName, child.attributes, ...childNodes).spec;
+	}).join(",");
 
-		switch (tagName) {
-			case "panel":
-				instance = parentInstance.add(
-					"panel",
-					bounds,
-					text,
-					attributes.options
-				);
-				break;
-			case "button":
-				instance = parentInstance.add(
-					// @ts-expect-error
-					"button",
-					bounds,
-					text,
-					attributes.options
-				);
-				break;
-			default:
-				throw new Error(`Unsupported element type: ${tagName}`);
-		}
+	let spec = "";
 
-		element = { instance, tagName: tagName, attributes: attributes };
+	switch (tagName) {
+		case "dialog":
+			spec = `dialog { ${props}, ${nodes} }`;
+			break;
+		case "panel":
+		case "group":
+			spec = `${capitalize(tagName)} { ${props}, ${nodes} }`;
+			break;
+		default:
+			spec = `${capitalize(tagName)} { ${props} }`;
+			break;
 	}
 
-	if (children.length > 0) {
-		parentStack.push(element);
-		forEach(children, (child) =>
-			jsx(child.tagName, child.attributes, child.children)
-		);
-		parentStack.pop();
-	}
-
-	return element;
+	return {
+		tagName,
+		attributes,
+		children,
+		spec,
+	};
 }
 
-type Container = Window | Panel | Group | Tab; // | TabbedPanel (breaks types-for-adobe)
-function isContainer(element: any): element is Container {
-	return !!element.add;
+export function renderSpec(scriptUI: JSX.Element) {
+	// alert("spec:\n" + scriptUI.spec);
+	// @ts-ignore
+	const window = new Window(scriptUI.spec);
+	window.onResize = window.onResizing = function () {
+		this.layout.resize();
+	};
+	return window;
 }

@@ -6,7 +6,7 @@ import {
 
 declare global {
 	namespace JSX {
-		type Element = ScriptUIElement;
+		type Element = ScriptUIElement & { spec: string };
 
 		interface IntrinsicElements extends IntrinsicElementMap {}
 
