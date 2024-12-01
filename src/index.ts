@@ -1,7 +1,8 @@
-import { renderSpec, ui } from "./dialog";
+import { ui } from "./ui";
+import { renderSpec } from "./jsx";
 
 (function (thisObj) {
-	renderSpec(ui()).show();
+	renderSpec(ui()).window.show();
 })(this);
 
 const eval2 = eval;
