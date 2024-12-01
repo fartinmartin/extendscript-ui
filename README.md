@@ -29,6 +29,14 @@ This allows us to use JSX to generate a ScriptUI compliant string. Passing this 
 
 I'm not sure I'm doing that wiring the best way right now, but we've got `onClick` events :)
 
+## Try it
+
+It's early days so the easiest way to try this out is to:
+
+1. Clone this repo `gh repo clone fartinmartin/extendscript-ui`
+2. `cd extendscript-ui && npm i && npm run dev`
+3. Open After Effects and run `dist/jsx/extendscript-ui-v0.0.1.jsx`
+
 ## TODO
 
 - [ ] Test/add more ScriptUI functionality beyond `onClick`...
