@@ -1,6 +1,6 @@
-import { find, forEach, map } from "extendscript-ponyfills";
+import { forEach, map } from "extendscript-ponyfills";
 import { InstanceProps } from "./types/es3-helpers";
-import { mapProps, capitalize, noop } from "./utils";
+import { mapProps, capitalize } from "./utils";
 
 export type ScriptUIElement = {
 	tagName: ScriptUIElementTagName;
@@ -77,9 +77,7 @@ export function jsx<T extends ScriptUIElementTagName>(
 }
 
 export function renderSpec(scriptUI: JSX.Element) {
-	// alert("spec:\n" + scriptUI.spec);
-
-	// @ts-ignore
+	// alert("spec:\n" + scriptUI.spec); // @ts-ignore
 	const window = new Window(scriptUI.spec);
 
 	window.onResize = window.onResizing = function () {
