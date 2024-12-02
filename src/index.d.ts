@@ -1,8 +1,4 @@
-import {
-	ScriptUIElement,
-	ScriptUIElementTagName,
-	ScriptUIElements,
-} from "./jsx";
+import { ScriptUIElement, ScriptUIElementTagName, ScriptUIElements } from ".";
 
 declare global {
 	namespace JSX {
