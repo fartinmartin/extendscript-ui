@@ -1,7 +1,7 @@
 {
 	"name": "extendscript-ui",
 	"version": "0.0.1",
-	"description": "JSX templating for Adobe ExtendScript?",
+	"description": "JSX templating for Adobe ExtendScript",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
@@ -22,6 +22,6 @@
 		"typescript": "^5.7.2"
 	},
 	"dependencies": {
-		"extendscript-ponyfills": "^1.1.0"
+		"extendscript-ponyfills": "^1.1.1"
 	}
 }
