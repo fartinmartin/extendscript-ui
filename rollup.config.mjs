@@ -1,5 +1,6 @@
 import nodeResolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
+import copy from "rollup-plugin-copy";
 // import removeExports from "./rollup/rollup-plugin-remove-exports.js";
 import pkg from "./package.json" assert { type: "json" };
 
@@ -17,6 +18,9 @@ export default [
 				ignoreDeprecations: "5.0",
 				declaration: true,
 				declarationDir: "dist",
+			}),
+			copy({
+				targets: [{ src: "src/types/jsx.d.ts", dest: "dist/types" }],
 			}),
 		],
 	},

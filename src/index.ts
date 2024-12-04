@@ -77,7 +77,8 @@ export function jsx<T extends ScriptUIElementTagName>(
 }
 
 export function renderSpec(scriptUI: JSX.Element) {
-	// alert("spec:\n" + scriptUI.spec); // @ts-ignore
+	// alert("spec:\n" + scriptUI.spec);
+	// @ts-ignore
 	const window = new Window(scriptUI.spec);
 
 	window.onResize = window.onResizing = function () {
