@@ -1,6 +1,6 @@
 # `@extendscript-ui/example-basic`
 
-![screenshot](basic.png | width=200)
+<img src="basic.png" width="200" alt="screenshot of basic dialog"/>
 
 This example renders a basic `Dialog` with several `Button`s grouped within two `Panel`s.
 
