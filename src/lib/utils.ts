@@ -1,3 +1,5 @@
+import { map } from "extendscript-ponyfills";
+
 export function noop() {}
 
 export function mapProps<T extends any>(
@@ -19,4 +21,11 @@ export function uuid(prefix = "id") {
 
 export function capitalize(str: string) {
 	return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function pascal(str: string) {
+	const words = str.split("-");
+	return map(words, (word) => {
+		return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+	}).join("");
 }

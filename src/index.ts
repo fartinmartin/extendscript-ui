@@ -1,6 +1,6 @@
 import { forEach, map } from "extendscript-ponyfills";
 import { InstanceProps } from "./types/utils";
-import { mapProps, capitalize } from "./lib/utils";
+import { mapProps, capitalize, pascal } from "./lib/utils";
 
 export type ScriptUIElement = {
 	tagName: ScriptUIElementTagName;
@@ -53,15 +53,34 @@ export type ScriptUIElementTagName = keyof ScriptUIElements;
 const eventHandlers: Record<string, () => void> = {};
 let idCounter = 0;
 
-// function jsx<T extends JSX.Tag = JSX.Tag>(tag: T, attributes: { [key: string]: any } | null, ...children: Node[]): JSX.Element
-// function jsx(tag: JSX.Component, attributes: Parameters<typeof tag> | null, ...children: Node[]): Node
-// function jsx(tag: JSX.Tag | JSX.Component, attributes: { [key: string]: any } | null, ...children: Node[]) {
+// export function jsx<T extends ScriptUIElementTagName>(
+// 	tagName: T,
+// 	attributes: ScriptUIElements[T],
+// 	...children: ScriptUIElement[]
+// ): JSX.Element;
+// export function jsx(
+// 	tagName: JSX.Component,
+// 	attributes: Parameters<typeof tagName>[0] | null,
+// 	...children: ScriptUIElement[]
+// ): JSX.Element;
+// export function jsx(
+// 	tagName: ScriptUIElementTagName | JSX.Component,
+// 	attributes: Parameters<typeof tagName>[0] | null,
+// 	...children: ScriptUIElement[]
+// ): JSX.Element {
+// 	// TODO...
+// }
 
 export function jsx<T extends ScriptUIElementTagName>(
-	tagName: T,
+	tagName: T | JSX.Component,
 	attributes: ScriptUIElements[T],
 	...children: ScriptUIElement[]
 ): JSX.Element {
+	if (typeof tagName === "function") {
+		const el = tagName(attributes ?? {}, children);
+		return { ...el, spec: "", id: "" };
+	}
+
 	const id = getIdentifier(tagName, attributes);
 
 	if ("onClick" in attributes && attributes.onClick) {
@@ -93,7 +112,7 @@ export function jsx<T extends ScriptUIElementTagName>(
 			spec = `${capitalize(tagName)} { ${props}, ${nodes} }`;
 			break;
 		default:
-			spec = `${capitalize(tagName)} { ${props} }`;
+			spec = `${pascal(tagName)} { ${props} }`;
 			break;
 	}
 
@@ -143,7 +162,7 @@ function getIdentifier<T extends ScriptUIElementTagName>(
 	) {
 		name = attributes.properties.name;
 	} else {
-		name = `${tagName}_${idCounter++}`;
+		name = `${pascal(tagName).toLowerCase()}_${idCounter++}`;
 	}
 
 	attributes.properties = {
