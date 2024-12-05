@@ -20,7 +20,7 @@ Well, now you can! Plus, TypeScript will guide you through each prop with auto c
 
 ### Prerequisites
 
-You'll need TypeScript and a bundler for your code. Here are some ExtendScript starters tp check out:
+You'll need TypeScript and a bundler for your code. Here are some ExtendScript starters with TypeScript support to check out:
 
 - [`@motiondeveloper/adobe-script-starter`](https://github.com/motiondeveloper/adobe-script-starter)
 - [`@fartinmartin/adobe-lib-starter`](https://github.com/fartinmartin/adobe-lib-starter)
