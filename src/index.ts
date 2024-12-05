@@ -13,19 +13,49 @@ type Attributes<T extends new (...args: any[]) => any, K> = Partial<
 >;
 
 export type ScriptUIElements = {
+	// windows
 	dialog: Attributes<typeof Window, _AddControlPropertiesWindow>;
 	palette: Attributes<typeof Window, _AddControlPropertiesWindow>;
+	// containers
 	panel: Attributes<typeof Panel, _AddControlPropertiesPanel>;
 	group: Attributes<typeof Group, _AddControlProperties>;
+	"tabbed-panel": Attributes<typeof TabbedPanel, _AddControlProperties>;
+	tab: Attributes<typeof Tab, _AddControlProperties>;
+	// controls
 	button: Attributes<typeof Button, _AddControlProperties> & {
 		onClick?: Button["onClick"];
 	};
+	checkbox: Attributes<typeof Checkbox, _AddControlProperties>;
+	image: Attributes<typeof Image, _AddControlProperties>;
+	"progress-bar": Attributes<typeof Progressbar, _AddControlProperties>;
+	"radio-button": Attributes<typeof RadioButton, _AddControlProperties>;
+	scrollbar: Attributes<typeof Scrollbar, _AddControlProperties>;
+	slider: Attributes<typeof Slider, _AddControlProperties>;
+	//
+	"edit-text": Attributes<typeof EditText, _AddControlPropertiesEditText>;
+	"icon-button": Attributes<typeof IconButton, _AddControlPropertiesIconButton>;
+	"static-text": Attributes<typeof StaticText, _AddControlPropertiesStaticText>;
+	"flash-player": Attributes<typeof FlashPlayer, _AddControlProperties> & {
+		movieToLoad?: string | File;
+	};
+	// TODO: figure out how to render TreeView | ListBox | DropDownList
+	// "tree-view": Attributes<typeof TreeView, _AddControlPropertiesTreeView>;
+	// "list-box": Attributes<typeof ListBox, _AddControlPropertiesListBox>;
+	// "dropdown-list": Attributes<
+	// 	typeof DropDownList,
+	// 	_AddControlPropertiesDropDownList
+	// >;
+	// "list-item": Attributes<typeof ListItem, _AddControlProperties>;
 };
 
 export type ScriptUIElementTagName = keyof ScriptUIElements;
 
 const eventHandlers: Record<string, () => void> = {};
 let idCounter = 0;
+
+// function jsx<T extends JSX.Tag = JSX.Tag>(tag: T, attributes: { [key: string]: any } | null, ...children: Node[]): JSX.Element
+// function jsx(tag: JSX.Component, attributes: Parameters<typeof tag> | null, ...children: Node[]): Node
+// function jsx(tag: JSX.Tag | JSX.Component, attributes: { [key: string]: any } | null, ...children: Node[]) {
 
 export function jsx<T extends ScriptUIElementTagName>(
 	tagName: T,
