@@ -1,6 +1,8 @@
-# JSX templating for ScriptUI/ExtendScript
+# `extendscript-ui`
 
-Have you ever wanted to compose ScriptUI like so:
+## JSX templating for ScriptUI/ExtendScript
+
+Have you ever wanted to compose ScriptUI with JSX, like so:
 
 <!-- prettier-ignore -->
 ```jsx
@@ -9,44 +11,50 @@ Have you ever wanted to compose ScriptUI like so:
 </dialog>
 ```
 
-Well, now you can! Plus TypeScript will guide you with auto completions! Although—keep in mind, just the basics work right now :)
+Well, now you can! Plus, TypeScript will guide you through each prop with auto completions!
 
 ## Try it
 
 > [!TIP]
 > For a super basic example, check out [`/examples/basic`](/examples/basic)!
 
-You'll need to be using TypeScript and a way to bundle your code. Here are a few ExtendScript starters to check out:
+### Prerequisites
+
+You'll need TypeScript and a bundler for your code. Here are some ExtendScript starters tp check out:
 
 - [`@motiondeveloper/adobe-script-starter`](https://github.com/motiondeveloper/adobe-script-starter)
 - [`@fartinmartin/adobe-lib-starter`](https://github.com/fartinmartin/adobe-lib-starter)
 - [`@Klustre/extender`](https://github.com/Klustre/extender) (see [note on TypeScript](https://github.com/Klustre/extender?tab=readme-ov-file#typescript))
 
-Then:
+### Installation
 
 ```bash
 npm i extendscript-ui
 ```
 
-And update your `tsconfig.json`:
+### Configuration
+
+Update your `tsconfig.json`:
 
 <!-- prettier-ignore -->
 ```jsonc
 {
   "compilerOptions": {
     // ...your other config options, then:
-    // tell TypeScript how to find `extendscript-ui`'s jsx.d.ts declarations:
+    // tell TypeScript how to find extendscript-ui's jsx.d.ts declarations:
     "types": ["types/jsx.d.ts"],
     "typeRoots": ["./node_modules/extendscript-ui/dist"],
     // tell TypeScript how to transform your JSX code and the name of the jsxFactory fn to use when doing so:
     "jsx": "react",
-    "jsxFactory": "jsx" // this is the fn that `extendscript-ui` exports!
+    "jsxFactory": "jsx" // this is the fn that extendscript-ui exports!
   }
   // ...any other options
 }
 ```
 
-Then, whenever you want to use JSX for templating, make sure you're in a `.jsx` file for proper syntax highlighting, and import `jsx` to satisfy TypeScript and for code completion:
+### Usage
+
+Be sure to use `.jsx` files for JSX syntax highlighting. Import `jsx` to satisfy TypeScript and for code completion:
 
 <!-- prettier-ignore -->
 ```jsx
@@ -59,7 +67,7 @@ const ui = (
 );
 ```
 
-To render your template you'll need to import `renderSpec` from `extendscript-ui`. This will create our `Window` and wire up our `onClick` events. It will then return an object with your `Window` as well as a cleanup fn:
+Use `renderSpec` to render your template. This will create a `Window` and wires up your `onClick` events. It will then return an object with your `Window` as well as a cleanup fn:
 
 <!-- prettier-ignore -->
 ```jsx
@@ -74,9 +82,7 @@ window.show();
 
 ## How?
 
-By using [a custom `jsxFactory`](https://www.typescriptlang.org/tsconfig/#jsxFactory) with TypeScript that transforms JSX into a [ScriptUI Resource Specifications](https://extendscript.docsforadobe.dev/user-interface-tools/resource-specifications.html) compliant string. Passing this string to `new Window(specString)` will build the UI, after that, we just need to wire it up!
-
-I'm not sure I'm doing that wiring the best way right now, but for now we've got `onClick` events :)
+`extendscript-ui` uses a [custom `jsxFactory`](https://www.typescriptlang.org/tsconfig/#jsxFactory) to transform JSX into a [ScriptUI Resource Specifications](https://extendscript.docsforadobe.dev/user-interface-tools/resource-specifications.html)-compliant string. This string is passed to `new Window(specString)` to build the UI. Once the UI is built, `renderSpec` adds any event handlers to the created UI elements.
 
 ## TODO
 
