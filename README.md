@@ -2,7 +2,7 @@
 
 ## JSX templating for ScriptUI/ExtendScript
 
-Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
+Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX-like syntax, like so:
 
 <!-- prettier-ignore -->
 ```jsx
