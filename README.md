@@ -13,6 +13,23 @@ Have you ever wanted to compose ScriptUI with JSX, like so:
 
 Well, now you can! Plus, TypeScript will guide you through each prop with auto completions!
 
+You can even create functional components:
+
+<!-- prettier-ignore -->
+```jsx
+const Header = ({ text }: { text: string }) => (
+  <group orientation={"row"} alignChildren={"fill"}>
+    <static-text text={text}></static-text>
+  </group>
+);
+
+const ui = (
+  <dialog text="Could it be?!" properties={{ resizeable: true }}>
+    <Header text="Neat!" />
+  </dialog>
+);
+```
+
 ## Try it
 
 > [!TIP]
@@ -88,5 +105,4 @@ window.show();
 ## TODO
 
 - [ ] Test/add more ScriptUI functionality beyond `onClick`...
-- [ ] Overload `jsx` factory to allow functions as well (AKA let users compose their own UIs, not just `IntrinsicElement` tagNames, see [TypeScript docs](https://www.typescriptlang.org/docs/handbook/jsx.html), [StackOverflow](https://stackoverflow.com/a/68238924/8703073) and [TypeScript Playground](https://www.typescriptlang.org/play/?target=99#code/PQKgsAUABCUAICsDOAPKyWRsSw9QB4AnAUwDMTSA7AYxKgBsBLAIwF4AiAEQHkBZDlGAA+SJAAmJGgwCGpKFRkBbEkgAOMulABSAZQAaUAN5YoZ-ABUAFvVIAXAK5EqUOwE819APZkoXpzoGUABimnZeRG6mZu6eUACiDCQqVHZQbFAAEhZ8ADKJySSpANxi0GZCwFAAkqlETFRITDQFKXZ8MmpQAOZEMixIUDIMDK42UEh2MlTicuJZObmuMt2DDWP0FrpQvHyMrAB00VANdpRkmvS1dvWNza1FdoMkKGczg9e3TS1JbR1dRigAF8ysdLOMyF4Rl4AO4NbpDeQ0ByTLxKVweVQAGgUXjSGiIaR8UC2AHJBgBrKiwlx6QyKFTqS4ALmOsSudQa3weqX+6WMxwqUAA2gBpE4uCkkNzE7J5Hl2CwrAByyhI-wAusyBeUhXqRRTtZNbt0tUMqFFdXqQVabWzMSSVvypTLfHSDp8ufdfo8kKUIMdTudLlAAMJotReKiPHX6swACjURC8nkJTFUAH5tYDhS6jTd4Wbpm5gTiaFYmAxxNQs1BlV5JMKNQBKbX1yTHG12iBkBy0OxMKPoVAECxQF5vcSDd1KhEZGcrYTxqbdbUWHEyOwFlgOM5IbMG6X5k1Fi3AqAAHwUDhGOIO9-LlerRTbDZITdbgX0BwVkF7-cHFwMGXFZtXdcMlEjaNUg3Ld6h3PdtQABTkNUziIJACHZYkV2ES9r1vKB7wOR8q2oV9GxbCiSD-PsaAHIdgJXMCDAOWd8PAiMo0eWDt13VQD1zI8JgLKhTW1YtzyvKgbwYO8HwrMiXzrN8P1jComF8ZdMRwp02H0qBSX-ejANJZt1P1ewnBcFd403Pi9ygDMM2MIEy0U58qGbf0hRtIV2UdOcMU8XTuh8ioaCjSZxx9VJtTlfJYsVFU1X+YVZw1flxC8ZE2hI0hNxIBUQO6byyiFfAAEEkCaboXHs+D+P3Y4kjSJROn5Oy4NYJqnJcowgTKq1WqgJMU21F0cJ03x2rUcKzEhIgoETZMumJeMeBYBApDsA4XSQeNZvMmRBmLZtzJMAMrQqqp4lePp6KgAA3YYHAEwUKjGroMi+g5wl0UTunjIa4ygSLGjSF6GDe-lZuFL7MpO803HmvVwei4sACVyEoIotAyEgkqGU6LVRoVNOW7DfCxnHqDoeHVsy-SMlJPtJDIBoSHEMyLNByooGqoYoAuEYWE0CleOSNQ0nCCYSDSaYhm6hCSFZa640JwpUgOJB5cq5X+JWlMcSht6QbjIEYt13nQZpig6ffBH+VNkgyYqPz3fKip8E6TwZjBjzqGORblpG0j5mJcPqAuj6zAp7SQt8cP0gM8lAZ5y6+YqTW8oaaMiAsCcoAAagycO3f1cGBxk13Y+BOv48qog+jcA4mCQJuW-jcPzptjWkoOX2inEeNiJ7iu0ajau3onj39Rzx5B7UP3xFDDzu4882zDnqArOcGKtbsf1u2MhiXCQ+F40BFhocJYEDxvpw7GPeFgRjq095cAhxCYJ7hCMR+hIgQEGAD-P+kBuwvSWoTfkBAL5iSgIAuwnA3AyA4MIEB8DujCH9JAKBUAwGwMIUwcQnBIReHQZkQmDAvBfgAITGEJsA0Bv8cFlGyrlReLAGytyHjMNeT54xgObEAA))
 - [ ] Likely other things I've not thought of...

@@ -1,6 +1,6 @@
 import { forEach, map } from "extendscript-ponyfills";
 import { InstanceProps } from "./types/utils";
-import { mapProps, capitalize } from "./lib/utils";
+import { mapProps, capitalize, pascal } from "./lib/utils";
 
 export type ScriptUIElement = {
 	tagName: ScriptUIElementTagName;
@@ -13,13 +13,39 @@ type Attributes<T extends new (...args: any[]) => any, K> = Partial<
 >;
 
 export type ScriptUIElements = {
+	// windows
 	dialog: Attributes<typeof Window, _AddControlPropertiesWindow>;
 	palette: Attributes<typeof Window, _AddControlPropertiesWindow>;
+	// containers
 	panel: Attributes<typeof Panel, _AddControlPropertiesPanel>;
 	group: Attributes<typeof Group, _AddControlProperties>;
+	"tabbed-panel": Attributes<typeof TabbedPanel, _AddControlProperties>;
+	tab: Attributes<typeof Tab, _AddControlProperties>;
+	// controls
 	button: Attributes<typeof Button, _AddControlProperties> & {
 		onClick?: Button["onClick"];
 	};
+	checkbox: Attributes<typeof Checkbox, _AddControlProperties>;
+	image: Attributes<typeof Image, _AddControlProperties>;
+	"progress-bar": Attributes<typeof Progressbar, _AddControlProperties>;
+	"radio-button": Attributes<typeof RadioButton, _AddControlProperties>;
+	scrollbar: Attributes<typeof Scrollbar, _AddControlProperties>;
+	slider: Attributes<typeof Slider, _AddControlProperties>;
+	//
+	"edit-text": Attributes<typeof EditText, _AddControlPropertiesEditText>;
+	"icon-button": Attributes<typeof IconButton, _AddControlPropertiesIconButton>;
+	"static-text": Attributes<typeof StaticText, _AddControlPropertiesStaticText>;
+	"flash-player": Attributes<typeof FlashPlayer, _AddControlProperties> & {
+		movieToLoad?: string | File;
+	};
+	// TODO: figure out how to render TreeView | ListBox | DropDownList
+	// "tree-view": Attributes<typeof TreeView, _AddControlPropertiesTreeView>;
+	// "list-box": Attributes<typeof ListBox, _AddControlPropertiesListBox>;
+	// "dropdown-list": Attributes<
+	// 	typeof DropDownList,
+	// 	_AddControlPropertiesDropDownList
+	// >;
+	// "list-item": Attributes<typeof ListItem, _AddControlProperties>;
 };
 
 export type ScriptUIElementTagName = keyof ScriptUIElements;
@@ -27,11 +53,34 @@ export type ScriptUIElementTagName = keyof ScriptUIElements;
 const eventHandlers: Record<string, () => void> = {};
 let idCounter = 0;
 
+// export function jsx<T extends ScriptUIElementTagName>(
+// 	tagName: T,
+// 	attributes: ScriptUIElements[T],
+// 	...children: ScriptUIElement[]
+// ): JSX.Element;
+// export function jsx(
+// 	tagName: JSX.Component,
+// 	attributes: Parameters<typeof tagName>[0] | null,
+// 	...children: ScriptUIElement[]
+// ): JSX.Element;
+// export function jsx(
+// 	tagName: ScriptUIElementTagName | JSX.Component,
+// 	attributes: Parameters<typeof tagName>[0] | null,
+// 	...children: ScriptUIElement[]
+// ): JSX.Element {
+// 	// TODO...
+// }
+
 export function jsx<T extends ScriptUIElementTagName>(
-	tagName: T,
+	tagName: T | JSX.Component,
 	attributes: ScriptUIElements[T],
 	...children: ScriptUIElement[]
 ): JSX.Element {
+	if (typeof tagName === "function") {
+		const el = tagName(attributes ?? {}, children);
+		return { ...el, spec: "", id: "" };
+	}
+
 	const id = getIdentifier(tagName, attributes);
 
 	if ("onClick" in attributes && attributes.onClick) {
@@ -63,7 +112,7 @@ export function jsx<T extends ScriptUIElementTagName>(
 			spec = `${capitalize(tagName)} { ${props}, ${nodes} }`;
 			break;
 		default:
-			spec = `${capitalize(tagName)} { ${props} }`;
+			spec = `${pascal(tagName)} { ${props} }`;
 			break;
 	}
 
@@ -113,7 +162,7 @@ function getIdentifier<T extends ScriptUIElementTagName>(
 	) {
 		name = attributes.properties.name;
 	} else {
-		name = `${tagName}_${idCounter++}`;
+		name = `${pascal(tagName).toLowerCase()}_${idCounter++}`;
 	}
 
 	attributes.properties = {
