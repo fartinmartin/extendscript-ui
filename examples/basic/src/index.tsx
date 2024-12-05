@@ -1,7 +1,14 @@
 import { jsx, renderSpec } from "extendscript-ui";
 
+const Header = ({ text }: { text: string }) => (
+	<group orientation={"row"} alignChildren={"fill"}>
+		<static-text text={text}></static-text>
+	</group>
+);
+
 const ui = (
 	<dialog text="Neat!" properties={{ resizeable: true }}>
+		<Header text="Could it be?!" />
 		<group orientation={"column"} alignChildren={"fill"}>
 			<panel
 				text="Wow, a panel!"
