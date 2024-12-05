@@ -1,10 +1,10 @@
 {
 	"compilerOptions": {
-		"target": "ES3",
+		"target": "es3",
 		"ignoreDeprecations": "5.0",
 		"moduleResolution": "node",
-		"noLib": true,
 		"strict": true,
+		"noLib": true,
 		"types": ["AfterEffects/23.0", "types/jsx.d.ts"],
 		"typeRoots": [
 			"./node_modules/types-for-adobe/",
