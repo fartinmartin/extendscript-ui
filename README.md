@@ -54,7 +54,7 @@ Update your `tsconfig.json`:
 
 ### Usage
 
-Be sure to use `.jsx` files for JSX syntax highlighting. Import `jsx` to satisfy TypeScript and for code completion:
+Be sure to use `.tsx` files for JSX syntax highlighting. Import `jsx` to satisfy TypeScript and for code completion:
 
 <!-- prettier-ignore -->
 ```jsx
