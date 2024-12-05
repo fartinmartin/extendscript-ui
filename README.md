@@ -2,7 +2,7 @@
 
 ## JSX templating for ScriptUI/ExtendScript
 
-Have you ever wanted to compose ScriptUI with JSX, like so:
+Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
 
 <!-- prettier-ignore -->
 ```jsx
@@ -59,8 +59,8 @@ Update your `tsconfig.json`:
   "compilerOptions": {
     // ...your other config options, then:
     // tell TypeScript how to find extendscript-ui's jsx.d.ts declarations:
-    "types": ["types/jsx.d.ts"],
     "typeRoots": ["./node_modules/extendscript-ui/dist"],
+    "types": ["types/jsx.d.ts"],
     // tell TypeScript how to transform your JSX code and the name of the jsxFactory fn to use when doing so:
     "jsx": "react",
     "jsxFactory": "jsx" // this is the fn that extendscript-ui exports!
@@ -71,20 +71,21 @@ Update your `tsconfig.json`:
 
 ### Usage
 
-Be sure to use `.jsx` files for JSX syntax highlighting. Import `jsx` to satisfy TypeScript and for code completion:
+Be sure to use `.tsx` files for JSX syntax highlighting. Import `jsx` to satisfy TypeScript and for code completion:
 
 <!-- prettier-ignore -->
 ```jsx
+// index.tsx
 import { jsx } from "extendscript-ui";
 
-const ui = (
+export const ui = (
   <dialog text="Neat!" properties={{ closeButton: true }}>
     <button text="Click me!" onClick={() => alert("Doink!")} />
   </dialog>
 );
 ```
 
-Use `renderSpec` to render your template. This will create a `Window` and wires up your `onClick` events. It will then return an object with your `Window` as well as a cleanup fn:
+Use `renderSpec` to render your template. This will create a `Window` and wire up your `onClick` events. It will then return an object with your `Window` as well as a cleanup fn:
 
 <!-- prettier-ignore -->
 ```jsx
@@ -95,7 +96,7 @@ window.show();
 ```
 
 > [!WARNING]
-> I'm not married to the `renderSpec` API, but it's what I set up for now...
+> The `renderSpec` API might evolve, but it's functional for now...
 
 ## How?
 
@@ -104,4 +105,10 @@ window.show();
 ## TODO
 
 - [ ] Test/add more ScriptUI functionality beyond `onClick`...
+- [ ] More type safety:
+    - [ ] `renderSpec` should only accept specString with a root of type `Window`
+    - [ ] remove `type` attribute since it's defined by tag (generally, make sure all attrs are cleaned up)
+- [ ] Figure out `TreeView | ListBox | DropDownList` rendering
+- [ ] Default text nodes to `<static-text/>`? e.g `<button>hello!</button> === <button text="hello!"/>`
+- [ ] ProgressBar helpers, etc?
 - [ ] Likely other things I've not thought of...
