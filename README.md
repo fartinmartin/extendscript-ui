@@ -111,4 +111,5 @@ window.show();
 - [ ] Figure out `TreeView | ListBox | DropDownList` rendering
 - [ ] Default text nodes to `<static-text/>`? e.g `<button>hello!</button> === <button text="hello!"/>`
 - [ ] ProgressBar helpers, etc?
+- [ ] Look up how to auto import `jsx`, though this may just be documentation/guidance rather than a feature as it will probably depend on user's build setup?
 - [ ] Likely other things I've not thought of...
