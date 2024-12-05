@@ -4,22 +4,73 @@ Have you ever wanted to compose ScriptUI like so:
 
 <!-- prettier-ignore -->
 ```jsx
-<dialog text="Neat!" properties={{ resizeable: true }}>
-  <group orientation={"column"} alignChildren={"fill"}>
-    <panel text="First Row" orientation={"row"} alignChildren={"top"} margins={20}>
-      <button text="Click Me" size={[100, 200]} onClick={() => alert("Doink!")} />
-      <button text="Or Me!" size={[100, 100]} onClick={() => alert("Ty!")} />
-      <button text="Hello :)" size={[100, 50]} onClick={() => alert("Hi!")} />
-    </panel>
-    <panel text="Second Row" orientation={"row"} margins={20}>
-      <button text="OK" properties={{ name: "ok" }} />
-      <button text="Cancel" properties={{ name: "cancel" }} />
-    </panel>
-  </group>
+<dialog text="Neat!" properties={{ closeButton: true }}>
+  <button text="Click me!" size={[100, 200]} onClick={() => alert("Doink!")} />
 </dialog>
 ```
 
 Well, now you can! Plus TypeScript will guide you with auto completions! Although—keep in mind, just the basics work right now :)
+
+## Try it
+
+> [!TIP]
+> For a super basic example, check out [`/examples/basic`](/examples/basic)!
+
+You'll need to be using TypeScript and a way to bundle your code. Here are a few ExtendScript starters to check out:
+
+- [`@motiondeveloper/adobe-script-starter`](https://github.com/motiondeveloper/adobe-script-starter)
+- [`@fartinmartin/adobe-lib-starter`](https://github.com/fartinmartin/adobe-lib-starter)
+- [`@Klustre/extender`](https://github.com/Klustre/extender) (see [note on TypeScript](https://github.com/Klustre/extender?tab=readme-ov-file#typescript))
+
+Then:
+
+```bash
+npm i extendscript-ui
+```
+
+And update your `tsconfig.json`:
+
+<!-- prettier-ignore -->
+```jsonc
+{
+  "compilerOptions": {
+    // ...your other config options, then:
+    // tell TypeScript how to find `extendscript-ui`'s jsx.d.ts declarations:
+    "types": ["types/jsx.d.ts"],
+    "typeRoots": ["./node_modules/extendscript-ui/dist"],
+    // tell TypeScript how to transform your JSX code and the name of the jsxFactory fn to use when doing so:
+    "jsx": "react",
+    "jsxFactory": "jsx" // this is the fn that `extendscript-ui` exports!
+  }
+  // ...any other options
+}
+```
+
+Then, whenever you want to use JSX for templating, make sure you're in a `.jsx` file for proper syntax highlighting, and import `jsx` to satisfy TypeScript and for code completion:
+
+<!-- prettier-ignore -->
+```jsx
+import { jsx } from "extendscript-ui";
+
+const ui = (
+  <dialog text="Neat!" properties={{ closeButton: true }}>
+    <button text="Click me!" onClick={() => alert("Doink!")} />
+  </dialog>
+);
+```
+
+To render your template you'll need to import `renderSpec` from `extendscript-ui`. This will return an object with your `Window` as well as a cleanup fn:
+
+<!-- prettier-ignore -->
+```jsx
+import { renderSpec } from "extendscript-ui";
+
+const { window, destroy } = renderSpec(ui);
+window.show();
+```
+
+> [!WARNING]
+> I'm not married to the `renderSpec` API, but it's what I set up for now...
 
 ## How?
 
@@ -28,14 +79,6 @@ Using [a custom `jsxFactory`](https://www.typescriptlang.org/tsconfig/#jsxFactor
 This allows us to use JSX to generate a ScriptUI compliant string. Passing this string to `new Window(specString)` will build the UI, after that, we just need to wire it up!
 
 I'm not sure I'm doing that wiring the best way right now, but we've got `onClick` events :)
-
-## Try it
-
-It's early days so the easiest way to try this out is to:
-
-1. Clone this repo `gh repo clone fartinmartin/extendscript-ui`
-2. `cd extendscript-ui && npm i && npm run dev`
-3. Open After Effects and run `dist/jsx/extendscript-ui-v0.0.1.jsx`
 
 ## TODO
 

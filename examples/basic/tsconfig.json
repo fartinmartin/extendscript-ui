@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "ES3",
+		"ignoreDeprecations": "5.0",
+		"moduleResolution": "node",
+		"noLib": true,
+		"strict": true,
+		"types": ["AfterEffects/23.0", "types/jsx.d.ts"],
+		"typeRoots": [
+			"./node_modules/types-for-adobe/",
+			"./node_modules/extendscript-ui/dist"
+		],
+		"jsx": "react",
+		"jsxFactory": "jsx"
+	},
+	"exclude": ["dist"]
+}
