@@ -68,7 +68,7 @@ export const ui = (
 );
 ```
 
-Use `renderSpec` to render your template. This will create a `Window` and wires up your `onClick` events. It will then return an object with your `Window` as well as a cleanup fn:
+Use `renderSpec` to render your template. This will create a `Window` and wire up your `onClick` events. It will then return an object with your `Window` as well as a cleanup fn:
 
 <!-- prettier-ignore -->
 ```jsx
