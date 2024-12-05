@@ -42,8 +42,8 @@ Update your `tsconfig.json`:
   "compilerOptions": {
     // ...your other config options, then:
     // tell TypeScript how to find extendscript-ui's jsx.d.ts declarations:
-    "types": ["types/jsx.d.ts"],
     "typeRoots": ["./node_modules/extendscript-ui/dist"],
+    "types": ["types/jsx.d.ts"],
     // tell TypeScript how to transform your JSX code and the name of the jsxFactory fn to use when doing so:
     "jsx": "react",
     "jsxFactory": "jsx" // this is the fn that extendscript-ui exports!
@@ -58,9 +58,10 @@ Be sure to use `.jsx` files for JSX syntax highlighting. Import `jsx` to satisfy
 
 <!-- prettier-ignore -->
 ```jsx
+// index.tsx
 import { jsx } from "extendscript-ui";
 
-const ui = (
+export const ui = (
   <dialog text="Neat!" properties={{ closeButton: true }}>
     <button text="Click me!" onClick={() => alert("Doink!")} />
   </dialog>
@@ -78,7 +79,7 @@ window.show();
 ```
 
 > [!WARNING]
-> I'm not married to the `renderSpec` API, but it's what I set up for now...
+> The `renderSpec` API might evolve, but it's functional for now...
 
 ## How?
 
