@@ -1,10 +1,10 @@
-import { jsx } from "./jsx";
+import { jsx, renderSpec } from "extendscript-ui";
 
-export const ui = () => (
+const ui = (
 	<dialog text="Neat!" properties={{ resizeable: true }}>
 		<group orientation={"column"} alignChildren={"fill"}>
 			<panel
-				text="First Row"
+				text="Wow, a panel!"
 				orientation={"row"}
 				alignChildren={"top"}
 				margins={20}
@@ -17,10 +17,14 @@ export const ui = () => (
 				<button text="Or Me!" size={[100, 100]} onClick={() => alert("Ty!")} />
 				<button text="Hello :)" size={[100, 50]} onClick={() => alert("Hi!")} />
 			</panel>
-			<panel text="Second Row" orientation={"row"} margins={20}>
+			<panel text="No way, another panel?!" orientation={"row"} margins={20}>
 				<button text="OK" properties={{ name: "ok" }} />
 				<button text="Cancel" properties={{ name: "cancel" }} />
 			</panel>
 		</group>
 	</dialog>
 );
+
+(function (thisObj) {
+	renderSpec(ui).window.show();
+})(this);
