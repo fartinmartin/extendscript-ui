@@ -105,4 +105,10 @@ window.show();
 ## TODO
 
 - [ ] Test/add more ScriptUI functionality beyond `onClick`...
+- [ ] More type safety:
+    - [ ] `renderSpec` should only accept specString with a root of type `Window`
+    - [ ] remove `type` attribute since it's defined by tag (generally, make sure all attrs are cleaned up)
+- [ ] Figure out `TreeView | ListBox | DropDownList` rendering
+- [ ] Default text nodes to `<static-text/>`? e.g `<button>hello!</button> === <button text="hello!"/>`
+- [ ] ProgressBar helpers, etc?
 - [ ] Likely other things I've not thought of...
