@@ -53,24 +53,6 @@ export type ScriptUIElementTagName = keyof ScriptUIElements;
 const eventHandlers: Record<string, () => void> = {};
 let idCounter = 0;
 
-// export function jsx<T extends ScriptUIElementTagName>(
-// 	tagName: T,
-// 	attributes: ScriptUIElements[T],
-// 	...children: ScriptUIElement[]
-// ): JSX.Element;
-// export function jsx(
-// 	tagName: JSX.Component,
-// 	attributes: Parameters<typeof tagName>[0] | null,
-// 	...children: ScriptUIElement[]
-// ): JSX.Element;
-// export function jsx(
-// 	tagName: ScriptUIElementTagName | JSX.Component,
-// 	attributes: Parameters<typeof tagName>[0] | null,
-// 	...children: ScriptUIElement[]
-// ): JSX.Element {
-// 	// TODO...
-// }
-
 export function jsx<T extends ScriptUIElementTagName>(
 	tagName: T | JSX.Component,
 	attributes: ScriptUIElements[T],
@@ -78,7 +60,8 @@ export function jsx<T extends ScriptUIElementTagName>(
 ): JSX.Element {
 	if (typeof tagName === "function") {
 		const el = tagName(attributes ?? {}, children);
-		return { ...el, spec: "", id: "" };
+		// TODO: attributes?.id ?? `${tagName.name}_${idCounter++}`
+		return { ...el, spec: "", id: `${tagName.name}_${idCounter++}` };
 	}
 
 	const id = getIdentifier(tagName, attributes);
@@ -102,13 +85,16 @@ export function jsx<T extends ScriptUIElementTagName>(
 
 	switch (tagName) {
 		case "dialog":
-			spec = `dialog { ${props}, ${nodes} }`;
-			break;
 		case "palette":
-			spec = `palette { ${props}, ${nodes} }`;
+			spec = `${tagName} { ${props}, ${nodes} }`;
 			break;
 		case "panel":
 		case "group":
+			// case "tabbed-panel":
+			// case "tab":
+			// (maybe also) case "tree-view"
+			// (maybe also) case "list-box"
+			// (maybe also) case "dropdown-list"
 			spec = `${capitalize(tagName)} { ${props}, ${nodes} }`;
 			break;
 		default:
@@ -143,7 +129,9 @@ export function renderSpec(scriptUI: JSX.Element) {
 
 	return {
 		window,
-		destroy: () => {},
+		destroy: () => {
+			// TODO: clean up event listeners?
+		},
 	};
 }
 
@@ -151,9 +139,10 @@ export function renderSpec(scriptUI: JSX.Element) {
 
 function getIdentifier<T extends ScriptUIElementTagName>(
 	tagName: T,
-	attributes: ScriptUIElements[T]
+	attributes: ScriptUIElements[T] | null
 ) {
 	let name = "";
+	attributes = attributes ?? {};
 
 	if (
 		attributes.properties &&
@@ -173,11 +162,11 @@ function getIdentifier<T extends ScriptUIElementTagName>(
 	return name;
 }
 
+//
+
 type Container = Window | Panel | Group | Tab;
 type Control = _Control & { properties: { name: string } };
 const isContainer = (element: any): element is Container => !!element.add;
-
-//
 
 function forEachChild(
 	container: Container,
