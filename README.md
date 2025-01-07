@@ -85,6 +85,25 @@ export const ui = (
 );
 ```
 
+You can create custom components too:
+
+```jsx
+const Header = ({ text }: { text: string }) => (
+  <group orientation={"row"} alignChildren={"fill"}>
+    <static-text text={text}></static-text>
+  </group>
+);
+
+// later
+
+const ui = (
+  <dialog text="Neat!" properties={{ resizeable: true }}>
+    <Header text="Could it be?!" />
+    // other stuff...
+  </dialog>
+);
+```
+
 Use `renderSpec` to render your template. This will create a `Window` and wire up your `onClick` events. It will then return an object with your `Window` as well as a cleanup fn:
 
 <!-- prettier-ignore -->
