@@ -1,13 +1,13 @@
 {
 	"name": "extendscript-ui",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "JSX templating for Adobe ExtendScript",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"build": "rollup -c",
 		"dev": "rollup -cw",
-		"release": "npm run build && gh release create $npm_package_version ./dist/jsx/$npm_package_name-v$npm_package_version.jsx"
+		"release": "npm run build && npm publish"
 	},
 	"author": "Martin Lindberg",
 	"license": "MIT",
