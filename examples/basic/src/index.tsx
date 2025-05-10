@@ -1,4 +1,4 @@
-import { jsx, renderSpec } from "extendscript-ui";
+import { jsx, createWindow } from "extendscript-ui";
 
 const Header = ({ text }: { text: string }) => (
 	<group orientation={"row"} alignChildren={"fill"}>
@@ -7,7 +7,12 @@ const Header = ({ text }: { text: string }) => (
 );
 
 const ui = (
-	<dialog text="Neat!" properties={{ resizeable: true }}>
+	<dialog
+		text="Neat!"
+		properties={{ resizeable: true }}
+		/* @ts-ignore types-for-adobe thinks we _need_ to return boolean—we don't! */
+		onClose={() => alert("See ya!")}
+	>
 		<Header text="Could it be?!" />
 		<group orientation={"column"} alignChildren={"fill"}>
 			<panel
@@ -33,5 +38,5 @@ const ui = (
 );
 
 (function (thisObj) {
-	renderSpec(ui).window.show();
+	createWindow(ui).show();
 })(this);

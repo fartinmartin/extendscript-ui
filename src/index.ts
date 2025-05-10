@@ -1,5 +1,5 @@
-import { forEach, map } from "extendscript-ponyfills";
-import { InstanceProps } from "./types/utils";
+import { forEach, includes, map, startsWith } from "extendscript-ponyfills";
+import { InstanceProps, InstanceType } from "./types/utils";
 import { mapProps, capitalize, pascal } from "./lib/utils";
 
 export type ScriptUIElement = {
@@ -8,8 +8,12 @@ export type ScriptUIElement = {
 	children?: ScriptUIElement[];
 };
 
+type Methods<T> = {
+	[K in keyof T as K extends `on${string}` ? K : never]: T[K];
+};
+
 type Attributes<T extends new (...args: any[]) => any, K> = Partial<
-	InstanceProps<T> & { properties: K }
+	InstanceProps<T> & { properties: K } & Methods<InstanceType<T>>
 >;
 
 export type ScriptUIElements = {
@@ -22,22 +26,17 @@ export type ScriptUIElements = {
 	"tabbed-panel": Attributes<typeof TabbedPanel, _AddControlProperties>;
 	tab: Attributes<typeof Tab, _AddControlProperties>;
 	// controls
-	button: Attributes<typeof Button, _AddControlProperties> & {
-		onClick?: Button["onClick"];
-	};
+	button: Attributes<typeof Button, _AddControlProperties>;
 	checkbox: Attributes<typeof Checkbox, _AddControlProperties>;
 	image: Attributes<typeof Image, _AddControlProperties>;
 	"progress-bar": Attributes<typeof Progressbar, _AddControlProperties>;
 	"radio-button": Attributes<typeof RadioButton, _AddControlProperties>;
 	scrollbar: Attributes<typeof Scrollbar, _AddControlProperties>;
 	slider: Attributes<typeof Slider, _AddControlProperties>;
-	//
 	"edit-text": Attributes<typeof EditText, _AddControlPropertiesEditText>;
 	"icon-button": Attributes<typeof IconButton, _AddControlPropertiesIconButton>;
 	"static-text": Attributes<typeof StaticText, _AddControlPropertiesStaticText>;
-	"flash-player": Attributes<typeof FlashPlayer, _AddControlProperties> & {
-		movieToLoad?: string | File;
-	};
+	//
 	// TODO: figure out how to render TreeView | ListBox | DropDownList
 	// "tree-view": Attributes<typeof TreeView, _AddControlPropertiesTreeView>;
 	// "list-box": Attributes<typeof ListBox, _AddControlPropertiesListBox>;
@@ -46,11 +45,15 @@ export type ScriptUIElements = {
 	// 	_AddControlPropertiesDropDownList
 	// >;
 	// "list-item": Attributes<typeof ListItem, _AddControlProperties>;
+	//
+	"flash-player": Attributes<typeof FlashPlayer, _AddControlProperties> & {
+		movieToLoad?: string | File;
+	};
 };
 
 export type ScriptUIElementTagName = keyof ScriptUIElements;
 
-const eventHandlers: Record<string, () => void> = {};
+const eventHandlers: Record<string, { type: string; fn: () => void }> = {};
 let idCounter = 0;
 
 export function jsx<T extends ScriptUIElementTagName>(
@@ -66,13 +69,19 @@ export function jsx<T extends ScriptUIElementTagName>(
 
 	const id = getIdentifier(tagName, attributes);
 
-	if ("onClick" in attributes && attributes.onClick) {
-		eventHandlers[id] = attributes.onClick;
+	for (const prop in attributes) {
+		if (startsWith(prop, "on")) {
+			eventHandlers[id] = {
+				type: prop,
+				/* @ts-ignore */
+				fn: attributes[prop] as unknown as () => void,
+			};
+		}
 	}
 
 	const props = mapProps(
 		attributes,
-		(prop, value) => `${prop}: ${JSON.stringify(value)}`
+		(prop, value) => `${prop}: ${JSON.stringify(value)}`,
 	).join(",");
 
 	const nodes = map(children, (child) => {
@@ -111,35 +120,35 @@ export function jsx<T extends ScriptUIElementTagName>(
 	};
 }
 
-export function renderSpec(scriptUI: JSX.Element) {
-	// alert("spec:\n" + scriptUI.spec);
+export function createWindow(scriptUI: JSX.Element) {
+	if (!includes(["dialog", "palette"], scriptUI.tagName)) {
+		throw new Error(
+			`Can only create window from '<dialog>' or '<palette>' received: <${scriptUI.tagName}>`,
+		);
+	}
+
 	const window = new Window(scriptUI.spec as any);
 
 	window.onResize = window.onResizing = function () {
 		this.layout.resize();
 	};
 
-	forEachChild(window, (child) => {
-		if (child.properties && child.properties.name) {
-			const id = child.properties.name;
-			const cb = eventHandlers[id];
-			if (cb) (child as unknown as Button).onClick = cb;
-		}
-	});
+	for (const elementName in eventHandlers) {
+		const cb = eventHandlers[elementName];
+		/* @ts-ignore https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model/#accessing-child-elements */
+		const el = window.findElement(elementName);
+		el[cb.type] = cb.fn;
+		// TODO: pass el to cb? e.g: function () { return cb.fn(el); };
+	}
 
-	return {
-		window,
-		destroy: () => {
-			// TODO: clean up event listeners?
-		},
-	};
+	return window;
 }
 
 //
 
 function getIdentifier<T extends ScriptUIElementTagName>(
 	tagName: T,
-	attributes: ScriptUIElements[T] | null
+	attributes: ScriptUIElements[T],
 ) {
 	let name = "";
 	attributes = attributes ?? {};
@@ -160,23 +169,4 @@ function getIdentifier<T extends ScriptUIElementTagName>(
 	};
 
 	return name;
-}
-
-//
-
-type Container = Window | Panel | Group | Tab;
-type Control = _Control & { properties: { name: string } };
-const isContainer = (element: any): element is Container => !!element.add;
-
-function forEachChild(
-	container: Container,
-	callback: (control: Control) => void
-) {
-	forEach(container.children, (child) => {
-		if (isContainer(child)) {
-			forEachChild(child, callback);
-		} else {
-			callback(child as Control);
-		}
-	});
 }
