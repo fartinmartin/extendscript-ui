@@ -10,8 +10,10 @@ const ui = (
 	<dialog
 		text="Neat!"
 		properties={{ resizeable: true }}
-		/* @ts-ignore types-for-adobe thinks we _need_ to return boolean—we don't! */
-		onClose={() => alert("See ya!")}
+		onClose={() => {
+			alert("See ya!");
+			return true; // types-for-adobe thinks we _need_ to return boolean!
+		}}
 	>
 		<Header text="Could it be?!" />
 		<group orientation={"column"} alignChildren={"fill"}>
