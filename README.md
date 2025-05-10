@@ -2,7 +2,7 @@
 
 ## JSX templating for ScriptUI/ExtendScript
 
-Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX-like syntax, like so:
+Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
 
 <!-- prettier-ignore -->
 ```jsx
@@ -57,10 +57,12 @@ Update your `tsconfig.json`:
 ```jsonc
 {
   "compilerOptions": {
-    // ...your other config options, then:
+    // ...your other config options
+
     // tell TypeScript how to find extendscript-ui's jsx.d.ts declarations:
     "typeRoots": ["./node_modules/extendscript-ui/dist"],
     "types": ["types/jsx.d.ts"],
+
     // tell TypeScript how to transform your JSX code and the name of the jsxFactory fn to use when doing so:
     "jsx": "react",
     "jsxFactory": "jsx" // this is the fn that extendscript-ui exports!
@@ -85,50 +87,24 @@ export const ui = (
 );
 ```
 
-You can create custom components too:
-
-```jsx
-const Header = ({ text }: { text: string }) => (
-  <group orientation={"row"} alignChildren={"fill"}>
-    <static-text text={text}></static-text>
-  </group>
-);
-
-// later
-
-const ui = (
-  <dialog text="Neat!" properties={{ resizeable: true }}>
-    <Header text="Could it be?!" />
-    // other stuff...
-  </dialog>
-);
-```
-
-Use `renderSpec` to render your template. This will create a `Window` and wire up your `onClick` events. It will then return an object with your `Window` as well as a cleanup fn:
+Use `createWindow` to render your template. This will create a `Window`, wire up your event callbacks, and return the `Window`.
 
 <!-- prettier-ignore -->
 ```jsx
-import { renderSpec } from "extendscript-ui";
+import { createWindow } from "extendscript-ui";
 
-const { window, destroy } = renderSpec(ui);
+const window = createWindow(ui);
 window.show();
 ```
 
-> [!WARNING]
-> The `renderSpec` API might evolve, but it's functional for now...
-
 ## How?
 
-`extendscript-ui` uses a [custom `jsxFactory`](https://www.typescriptlang.org/tsconfig/#jsxFactory) to transform JSX into a [ScriptUI Resource Specifications](https://extendscript.docsforadobe.dev/user-interface-tools/resource-specifications.html)-compliant string. This string is passed to `new Window(specString)` to build the UI. Once the UI is built, `renderSpec` adds any event handlers to the created UI elements.
+`extendscript-ui` uses a [custom `jsxFactory`](https://www.typescriptlang.org/tsconfig/#jsxFactory) to transform JSX into a [ScriptUI Resource Specifications](https://extendscript.docsforadobe.dev/user-interface-tools/resource-specifications.html)-compliant string. This string is passed to `new Window(specString)` to build the UI. Once the UI is built, `createWindow` adds any event handlers to the created UI elements.
 
 ## TODO
 
-- [ ] Test/add more ScriptUI functionality beyond `onClick`...
-- [ ] More type safety:
-    - [ ] `renderSpec` should only accept specString with a root of type `Window`
-    - [ ] remove `type` attribute since it's defined by tag (generally, make sure all attrs are cleaned up)
+- [ ] Default text nodes to `<static-text/>`? e.g `<button>hello!</button> === <button text="hello!"/>`
 - [ ] Figure out `TreeView | ListBox | DropDownList` rendering
-- [ ] Default text nodes to `text` attr and/or `<static-text/>`? e.g `<button>hello!</button> === <button text="hello!"/>`
-- [ ] ProgressBar helpers, etc?
-- [ ] Look up how to auto import `jsx`, though this may just be documentation/guidance rather than a feature as it will probably depend on user's build setup?
-- [ ] Likely other things I've not thought of...
+- [ ] Remove `type` attribute from native types since it's defined by tag?
+- [ ] ProgressBar helpers?
+- [ ] ...?
