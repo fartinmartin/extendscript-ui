@@ -128,19 +128,20 @@ onWindow((window) => {
 > [!TIP]
 > ScriptUI has a helpful `findElement` method to use inside this hook! `extendscript-ui` also exports a `uniqueId` helper to ensure element `properties.name` values are valid.
 
+<!-- prettier-ignore -->
 ```tsx
 import { onWindow, uniqueId } from "extendscript-ui";
 
 const MyText = ({ text, properties }) => {
-	const name = properties?.name ?? uniqueId("my_text");
+  const name = properties?.name ?? uniqueId("my_text");
 
-	onWindow((window) => {
-		const el = window.findElement(name);
-		el.addEventListener("mouseover", () => (el.text = "Hello mouse!"));
-		el.addEventListener("mouseout", () => (el.text = text));
-	});
+  onWindow((window) => {
+    const el = window.findElement(name);
+    el.addEventListener("mouseover", () => (el.text = "Hello mouse!"));
+    el.addEventListener("mouseout", () => (el.text = text));
+  });
 
-	return <static-text text={text} properties={{ name }}></static-text>;
+  return <static-text text={text} properties={{ name }}></static-text>;
 };
 ```
 
