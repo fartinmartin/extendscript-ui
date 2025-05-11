@@ -13,10 +13,14 @@ const MyButton = ({
 	size,
 	onClick,
 }: ScriptUIElements["button"]) => {
-	const uniqueName = properties?.name ?? uniqueId("my_button");
+	const name = properties?.name ?? uniqueId("my_button");
 
 	onWindow((window) => {
-		const el = window.findElement(uniqueName);
+		/**
+		 * window.findElement does indeed exist, it's just not in types-for-adobe
+		 * once this PR is merged and published to npm we can remove (window as any)! https://github.com/docsforadobe/Types-for-Adobe/pull/142
+		 */
+		const el = (window as any).findElement(name);
 		el.addEventListener("mouseover", () => (el.text = "Hello mouse!"));
 		el.addEventListener("mouseout", () => (el.text = text));
 	});
@@ -26,7 +30,7 @@ const MyButton = ({
 			text={text}
 			size={size}
 			onClick={onClick}
-			properties={{ name: uniqueName }}
+			properties={{ name }}
 		></button>
 	);
 };

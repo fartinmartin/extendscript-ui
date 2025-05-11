@@ -211,7 +211,7 @@ function isSnakeCase(str: string): boolean {
 
 //
 
-type Effect = (refs: Record<string, any>) => void;
+type Effect = (window: Window) => void;
 let __CURRENT_EFFECTS: Effect[] | null = null;
 
 function collect(input: JSX.Element | (() => JSX.Element)): {

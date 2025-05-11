@@ -5,7 +5,7 @@
 Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
 
 <!-- prettier-ignore -->
-```jsx
+```tsx
 <dialog text="Neat!" properties={{ closeButton: true }}>
   <button text="Click me!" size={[100, 200]} onClick={() => alert("Doink!")} />
 </dialog>
@@ -16,7 +16,7 @@ Well, now you can! Plus, TypeScript will guide you through each prop with auto c
 You can even create functional components:
 
 <!-- prettier-ignore -->
-```jsx
+```tsx
 const Header = ({ text }: { text: string }) => (
   <group orientation={"row"} alignChildren={"fill"}>
     <static-text text={text}></static-text>
@@ -28,6 +28,25 @@ const ui = (
     <Header text="Neat!" />
   </dialog>
 );
+```
+
+And what would JSX be without "hooks":
+
+<!-- prettier-ignore -->
+```tsx
+import { onWindow, uniqueId, type ScriptUIElements } from "extendscript-ui";
+
+const MyButton = ({ text, onClick }: ScriptUIElements["button"]) => {
+  const name = uniqueId("my_button");
+
+  onWindow((window) => {
+    const el = window.findElement(name);
+    el.addEventListener("mouseover", () => (el.text = "Hello mouse!"));
+    el.addEventListener("mouseout", () => (el.text = text));
+  });
+
+  return <button text={text} onClick={onClick} properties={{ name }}></button>;
+};
 ```
 
 ## Try it
@@ -76,7 +95,7 @@ Update your `tsconfig.json`:
 Be sure to use `.tsx` files for JSX syntax highlighting. Import `jsx` to satisfy TypeScript and for code completion:
 
 <!-- prettier-ignore -->
-```jsx
+```tsx
 // index.tsx
 import { jsx } from "extendscript-ui";
 
@@ -90,11 +109,39 @@ export const ui = (
 Use `createWindow` to render your template. This will create a `Window`, wire up your event callbacks, and return the `Window`.
 
 <!-- prettier-ignore -->
-```jsx
+```tsx
 import { createWindow } from "extendscript-ui";
 
 const window = createWindow(ui);
 window.show();
+```
+
+To define behavior that requires the elements to be rendered (e.g. `element.addEventListener`) use the `onWindow` "hook". The callback function passed to `onWindow` will run after the `Window` object has been created and receives a reference to it.
+
+<!-- prettier-ignore -->
+```tsx
+onWindow((window) => {
+  window.addEventListener("mouseover", () => alert("Hello!"));
+});
+```
+
+> [!TIP]
+> ScriptUI has a helpful `findElement` method to use inside this hook! `extendscript-ui` also exports a `uniqueId` helper to ensure element `properties.name` values are valid.
+
+```tsx
+import { onWindow, uniqueId } from "extendscript-ui";
+
+const MyText = ({ text, properties }) => {
+	const name = properties?.name ?? uniqueId("my_text");
+
+	onWindow((window) => {
+		const el = window.findElement(name);
+		el.addEventListener("mouseover", () => (el.text = "Hello mouse!"));
+		el.addEventListener("mouseout", () => (el.text = text));
+	});
+
+	return <static-text text={text} properties={{ name }}></static-text>;
+};
 ```
 
 ## How?
