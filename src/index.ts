@@ -12,9 +12,10 @@ type Methods<T> = {
 	[K in keyof T as K extends `on${string}` ? K : never]: T[K];
 };
 
-type Attributes<T extends new (...args: any[]) => any, K> = Partial<
-	InstanceProps<T> & { properties: K } & Methods<InstanceType<T>>
->;
+type Attributes<
+	T extends new (...args: any[]) => any,
+	K = _AddControlProperties,
+> = Partial<InstanceProps<T> & { properties: K } & Methods<InstanceType<T>>>;
 
 export type ScriptUIElements = {
 	// windows
@@ -22,17 +23,17 @@ export type ScriptUIElements = {
 	palette: Attributes<typeof Window, _AddControlPropertiesWindow>;
 	// containers
 	panel: Attributes<typeof Panel, _AddControlPropertiesPanel>;
-	group: Attributes<typeof Group, _AddControlProperties>;
-	"tabbed-panel": Attributes<typeof TabbedPanel, _AddControlProperties>;
-	tab: Attributes<typeof Tab, _AddControlProperties>;
+	group: Attributes<typeof Group>;
+	"tabbed-panel": Attributes<typeof TabbedPanel>;
+	tab: Attributes<typeof Tab>;
 	// controls
-	button: Attributes<typeof Button, _AddControlProperties>;
-	checkbox: Attributes<typeof Checkbox, _AddControlProperties>;
-	image: Attributes<typeof Image, _AddControlProperties>;
-	"progress-bar": Attributes<typeof Progressbar, _AddControlProperties>;
-	"radio-button": Attributes<typeof RadioButton, _AddControlProperties>;
-	scrollbar: Attributes<typeof Scrollbar, _AddControlProperties>;
-	slider: Attributes<typeof Slider, _AddControlProperties>;
+	button: Attributes<typeof Button>;
+	checkbox: Attributes<typeof Checkbox>;
+	image: Attributes<typeof Image>;
+	"progress-bar": Attributes<typeof Progressbar>;
+	"radio-button": Attributes<typeof RadioButton>;
+	scrollbar: Attributes<typeof Scrollbar>;
+	slider: Attributes<typeof Slider>;
 	"edit-text": Attributes<typeof EditText, _AddControlPropertiesEditText>;
 	"icon-button": Attributes<typeof IconButton, _AddControlPropertiesIconButton>;
 	"static-text": Attributes<typeof StaticText, _AddControlPropertiesStaticText>;
@@ -44,17 +45,16 @@ export type ScriptUIElements = {
 	// 	typeof DropDownList,
 	// 	_AddControlPropertiesDropDownList
 	// >;
-	// "list-item": Attributes<typeof ListItem, _AddControlProperties>;
+	// "list-item": Attributes<typeof ListItem>;
 	//
-	"flash-player": Attributes<typeof FlashPlayer, _AddControlProperties> & {
+	"flash-player": Attributes<typeof FlashPlayer> & {
 		movieToLoad?: string | File;
 	};
 };
 
 export type ScriptUIElementTagName = keyof ScriptUIElements;
 
-const eventHandlers: Record<string, { type: string; fn: () => void }> = {};
-let idCounter = 0;
+const __EVENT_HANDLERS: Record<string, { type: string; fn: () => void }> = {};
 
 export function jsx<T extends ScriptUIElementTagName>(
 	tagName: T | JSX.Component,
@@ -63,15 +63,15 @@ export function jsx<T extends ScriptUIElementTagName>(
 ): JSX.Element {
 	if (typeof tagName === "function") {
 		const el = tagName(attributes ?? {}, children);
-		// TODO: attributes?.id ?? `${tagName.name}_${idCounter++}`
-		return { ...el, spec: "", id: `${tagName.name}_${idCounter++}` };
+		const id = uniqueId(pascal(tagName.name).toLowerCase());
+		return { ...el, spec: "", id };
 	}
 
 	const id = getIdentifier(tagName, attributes);
 
 	for (const prop in attributes) {
 		if (startsWith(prop, "on")) {
-			eventHandlers[id] = {
+			__EVENT_HANDLERS[id] = {
 				type: prop,
 				/* @ts-ignore */
 				fn: attributes[prop] as unknown as () => void,
@@ -120,25 +120,24 @@ export function jsx<T extends ScriptUIElementTagName>(
 	};
 }
 
-export function createWindow(scriptUI: JSX.Element) {
-	if (!includes(["dialog", "palette"], scriptUI.tagName)) {
+export function createWindow(scriptUI: JSX.Element | (() => JSX.Element)) {
+	const node = typeof scriptUI === "function" ? scriptUI() : scriptUI;
+
+	if (!includes(["dialog", "palette"], node.tagName)) {
 		throw new Error(
-			`Can only create window from '<dialog>' or '<palette>' received: <${scriptUI.tagName}>`,
+			`Can only create window from '<dialog>' or '<palette>' received: <${node.tagName}>`,
 		);
 	}
 
-	const window = new Window(scriptUI.spec as any);
+	const { spec, effects } = collect(() => node);
+	const window = new Window(spec as any);
+	forEach(effects, (fn) => fn(window));
 
-	window.onResize = window.onResizing = function () {
-		this.layout.resize();
-	};
-
-	for (const elementName in eventHandlers) {
-		const cb = eventHandlers[elementName];
+	for (const elementName in __EVENT_HANDLERS) {
+		const cb = __EVENT_HANDLERS[elementName];
 		/* @ts-ignore https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model/#accessing-child-elements */
 		const el = window.findElement(elementName);
 		el[cb.type] = cb.fn;
-		// TODO: pass el to cb? e.g: function () { return cb.fn(el); };
 	}
 
 	return window;
@@ -160,7 +159,7 @@ function getIdentifier<T extends ScriptUIElementTagName>(
 	) {
 		name = attributes.properties.name;
 	} else {
-		name = `${pascal(tagName).toLowerCase()}_${idCounter++}`;
+		name = uniqueId(pascal(tagName).toLowerCase());
 	}
 
 	attributes.properties = {
@@ -169,4 +168,29 @@ function getIdentifier<T extends ScriptUIElementTagName>(
 	};
 
 	return name;
+}
+
+export function uniqueId(prefix: string = "ui"): string {
+	return `${prefix}_${Math.random().toString(36).slice(2, 12)}`;
+}
+
+//
+
+type Effect = (refs: Record<string, any>) => void;
+let __CURRENT_EFFECTS: Effect[] | null = null;
+
+function collect(fn: () => JSX.Element): { spec: string; effects: Effect[] } {
+	const effects: Effect[] = [];
+	__CURRENT_EFFECTS = effects;
+	const { spec } = fn();
+	__CURRENT_EFFECTS = null;
+	return { spec, effects };
+}
+
+export function onWindow(fn: Effect) {
+	if (!__CURRENT_EFFECTS) {
+		throw new Error("onWindow must be used inside collect()");
+	} else {
+		__CURRENT_EFFECTS.push(fn);
+	}
 }

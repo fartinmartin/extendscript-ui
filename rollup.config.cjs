@@ -12,11 +12,7 @@ module.exports = [
 			format: "es",
 		},
 		plugins: [
-			typescript({
-				ignoreDeprecations: "5.0",
-				declaration: true,
-				declarationDir: "dist",
-			}),
+			typescript(),
 			copy({
 				targets: [{ src: "src/types/jsx.d.ts", dest: "dist/types" }],
 			}),
