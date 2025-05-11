@@ -120,17 +120,16 @@ export function jsx<T extends ScriptUIElementTagName>(
 	};
 }
 
-export function createWindow(scriptUI: JSX.Element | (() => JSX.Element)) {
-	const node = typeof scriptUI === "function" ? scriptUI() : scriptUI;
+export function createWindow(node: JSX.Element | (() => JSX.Element)) {
+	const { root, effects } = collect(node);
 
-	if (!includes(["dialog", "palette"], node.tagName)) {
+	if (!includes(["dialog", "palette"], root.tagName)) {
 		throw new Error(
-			`Can only create window from '<dialog>' or '<palette>' received: <${node.tagName}>`,
+			`Can only create window from '<dialog>' or '<palette>' received: <${root.tagName}>`,
 		);
 	}
 
-	const { spec, effects } = collect(() => node);
-	const window = new Window(spec as any);
+	const window = new Window(root.spec as any);
 	forEach(effects, (fn) => fn(window));
 
 	for (const elementName in __EVENT_HANDLERS) {
@@ -179,12 +178,15 @@ export function uniqueId(prefix: string = "ui"): string {
 type Effect = (refs: Record<string, any>) => void;
 let __CURRENT_EFFECTS: Effect[] | null = null;
 
-function collect(fn: () => JSX.Element): { spec: string; effects: Effect[] } {
+function collect(input: JSX.Element | (() => JSX.Element)): {
+	root: JSX.Element;
+	effects: Effect[];
+} {
 	const effects: Effect[] = [];
 	__CURRENT_EFFECTS = effects;
-	const { spec } = fn();
+	const root = typeof input === "function" ? input() : input;
 	__CURRENT_EFFECTS = null;
-	return { spec, effects };
+	return { root, effects };
 }
 
 export function onWindow(fn: Effect) {
