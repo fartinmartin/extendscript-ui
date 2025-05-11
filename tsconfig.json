@@ -8,8 +8,11 @@
 		"types": ["shared/ScriptUI.d.ts"],
 		"typeRoots": ["./node_modules/types-for-adobe/"],
 		"jsx": "react",
-		"jsxFactory": "jsx"
+		"jsxFactory": "jsx",
+		"outDir": "dist",
+		"declaration": true,
+		"declarationDir": "dist"
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx"],
-	"exclude": ["dist"]
+	"exclude": ["dist/**/*"]
 }
