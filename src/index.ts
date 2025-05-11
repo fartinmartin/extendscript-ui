@@ -54,6 +54,14 @@ export type ScriptUIElements = {
 
 export type ScriptUIElementTagName = keyof ScriptUIElements;
 
+class UIError extends Error {
+	type: string;
+	constructor(message: string) {
+		super(message);
+		this.type = "UIError";
+	}
+}
+
 const __EVENT_HANDLERS: Record<string, { type: string; fn: () => void }> = {};
 
 export function jsx<T extends ScriptUIElementTagName>(
@@ -121,25 +129,33 @@ export function jsx<T extends ScriptUIElementTagName>(
 }
 
 export function createWindow(node: JSX.Element | (() => JSX.Element)) {
-	const { root, effects } = collect(node);
+	try {
+		const { root, effects } = collect(node);
 
-	if (!includes(["dialog", "palette"], root.tagName)) {
-		throw new Error(
-			`Can only create window from '<dialog>' or '<palette>' received: <${root.tagName}>`,
-		);
+		if (!includes(["dialog", "palette"], root.tagName)) {
+			throw new UIError(
+				`Can only create window from '<dialog>' or '<palette>' received: <${root.tagName}>`,
+			);
+		}
+
+		const window = new Window(root.spec as any);
+		forEach(effects, (fn) => fn(window));
+
+		for (const elementName in __EVENT_HANDLERS) {
+			const cb = __EVENT_HANDLERS[elementName];
+			/* @ts-ignore https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model/#accessing-child-elements */
+			const el = window.findElement(elementName);
+			el[cb.type] = cb.fn;
+		}
+
+		return window;
+	} catch (e) {
+		if ((e as UIError).type === "UIError") {
+			throw new Error("\n⚠️ [extendscript-ui]\n" + (e as UIError).description);
+		} else {
+			throw e;
+		}
 	}
-
-	const window = new Window(root.spec as any);
-	forEach(effects, (fn) => fn(window));
-
-	for (const elementName in __EVENT_HANDLERS) {
-		const cb = __EVENT_HANDLERS[elementName];
-		/* @ts-ignore https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model/#accessing-child-elements */
-		const el = window.findElement(elementName);
-		el[cb.type] = cb.fn;
-	}
-
-	return window;
 }
 
 //
@@ -170,7 +186,27 @@ function getIdentifier<T extends ScriptUIElementTagName>(
 }
 
 export function uniqueId(prefix: string = "ui"): string {
-	return `${prefix}_${Math.random().toString(36).slice(2, 12)}`;
+	if (!isSnakeCase(prefix)) {
+		throw new UIError(
+			"uniqueId: prefix must be snake_case, received: " + prefix,
+		);
+	}
+
+	const chars = "0123456789abcdefghijklmnopqrstuvwxyz";
+
+	let n = Math.floor(Math.random() * 1e12);
+	let id = "";
+
+	while (n > 0) {
+		id = chars[n % 36] + id;
+		n = Math.floor(n / 36);
+	}
+
+	return `${prefix}_${id}`;
+}
+
+function isSnakeCase(str: string): boolean {
+	return /^[a-z]+(_[a-z]+)*$/.test(str);
 }
 
 //
@@ -191,7 +227,7 @@ function collect(input: JSX.Element | (() => JSX.Element)): {
 
 export function onWindow(fn: Effect) {
 	if (!__CURRENT_EFFECTS) {
-		throw new Error("onWindow must be used inside collect()");
+		throw new UIError("onWindow must be used inside collect()");
 	} else {
 		__CURRENT_EFFECTS.push(fn);
 	}
