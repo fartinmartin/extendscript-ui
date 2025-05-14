@@ -35,7 +35,7 @@ const MyButton = ({
 	);
 };
 
-const ui = () => {
+const ExampleUI = () => {
 	onWindow((window) => {
 		window.onResize = window.onResizing = function () {
 			window.layout.resize();
@@ -90,5 +90,5 @@ const ui = () => {
 };
 
 (function (thisObj) {
-	createWindow(ui).show();
+	createWindow(ExampleUI).show();
 })(this);

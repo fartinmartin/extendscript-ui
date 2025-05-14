@@ -151,6 +151,7 @@ const MyText = ({ text, properties }) => {
 
 ## TODO
 
+- [ ] Move `properties` into `InstanceProps` props?
 - [ ] Default text nodes to `<static-text/>`? e.g `<button>hello!</button> === <button text="hello!"/>`
 - [ ] Figure out `TreeView | ListBox | DropDownList` rendering
 - [ ] Remove `type` attribute from native types since it's defined by tag?

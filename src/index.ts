@@ -1,8 +1,15 @@
 import { forEach, includes, map, startsWith } from "extendscript-ponyfills";
 import { InstanceProps, InstanceType } from "./types/utils";
-import { mapProps, capitalize, pascal } from "./lib/utils";
+import {
+	mapProps,
+	capitalize,
+	pascal,
+	uniqueId,
+	UIError,
+	stringify,
+} from "./lib/utils";
 
-export type ScriptUIElement = {
+type ScriptUIElement = {
 	tagName: ScriptUIElementTagName;
 	attributes: ScriptUIElements[ScriptUIElementTagName];
 	children?: ScriptUIElement[];
@@ -17,7 +24,8 @@ type Attributes<
 	K = _AddControlProperties,
 > = Partial<InstanceProps<T> & { properties: K } & Methods<InstanceType<T>>>;
 
-export type ScriptUIElements = {
+type ScriptUIElementTagName = keyof ScriptUIElements;
+type ScriptUIElements = {
 	// windows
 	dialog: Attributes<typeof Window, _AddControlPropertiesWindow>;
 	palette: Attributes<typeof Window, _AddControlPropertiesWindow>;
@@ -52,19 +60,10 @@ export type ScriptUIElements = {
 	};
 };
 
-export type ScriptUIElementTagName = keyof ScriptUIElements;
-
-class UIError extends Error {
-	type: string;
-	constructor(message: string) {
-		super(message);
-		this.type = "UIError";
-	}
-}
-
 const __EVENT_HANDLERS: Record<string, { type: string; fn: () => void }> = {};
+let __CURRENT_EFFECTS: Effect[] | null = null;
 
-export function jsx<T extends ScriptUIElementTagName>(
+function jsx<T extends ScriptUIElementTagName>(
 	tagName: T | JSX.Component,
 	attributes: ScriptUIElements[T],
 	...children: ScriptUIElement[]
@@ -80,16 +79,16 @@ export function jsx<T extends ScriptUIElementTagName>(
 	for (const prop in attributes) {
 		if (startsWith(prop, "on")) {
 			__EVENT_HANDLERS[id] = {
-				type: prop,
-				/* @ts-ignore */
-				fn: attributes[prop] as unknown as () => void,
-			};
+				type: prop /* @ts-ignore */,
+				fn: attributes[prop],
+			}; /* @ts-ignore */
+			delete attributes[prop];
 		}
 	}
 
 	const props = mapProps(
 		attributes,
-		(prop, value) => `${prop}: ${JSON.stringify(value)}`,
+		(prop, value) => `${prop}: ${stringify(value)}`,
 	).join(",");
 
 	const nodes = map(children, (child) => {
@@ -128,7 +127,7 @@ export function jsx<T extends ScriptUIElementTagName>(
 	};
 }
 
-export function createWindow(node: JSX.Element | (() => JSX.Element)) {
+function createWindow(node: JSX.Element | (() => JSX.Element)) {
 	try {
 		const { root, effects } = collect(node);
 
@@ -143,7 +142,7 @@ export function createWindow(node: JSX.Element | (() => JSX.Element)) {
 
 		for (const elementName in __EVENT_HANDLERS) {
 			const cb = __EVENT_HANDLERS[elementName];
-			/* @ts-ignore https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model/#accessing-child-elements */
+			/* @ts-ignore https://github.com/docsforadobe/Types-for-Adobe/pull/142 */
 			const el = window.findElement(elementName);
 			el[cb.type] = cb.fn;
 		}
@@ -166,6 +165,7 @@ function getIdentifier<T extends ScriptUIElementTagName>(
 ) {
 	let name = "";
 	attributes = attributes ?? {};
+	// let name = attributes?.properties?.name ?? uniqueId(pascal(tagName).toLowerCase()); // T extends Omit<ScriptUIElementTagName, "dialog" | "palette">
 
 	if (
 		attributes.properties &&
@@ -185,34 +185,9 @@ function getIdentifier<T extends ScriptUIElementTagName>(
 	return name;
 }
 
-export function uniqueId(prefix: string = "ui"): string {
-	if (!isSnakeCase(prefix)) {
-		throw new UIError(
-			"uniqueId: prefix must be snake_case, received: " + prefix,
-		);
-	}
-
-	const chars = "0123456789abcdefghijklmnopqrstuvwxyz";
-
-	let n = Math.floor(Math.random() * 1e12);
-	let id = "";
-
-	while (n > 0) {
-		id = chars[n % 36] + id;
-		n = Math.floor(n / 36);
-	}
-
-	return `${prefix}_${id}`;
-}
-
-function isSnakeCase(str: string): boolean {
-	return /^[a-z]+(_[a-z]+)*$/.test(str);
-}
-
 //
 
 type Effect = (window: Window) => void;
-let __CURRENT_EFFECTS: Effect[] | null = null;
 
 function collect(input: JSX.Element | (() => JSX.Element)): {
 	root: JSX.Element;
@@ -225,10 +200,14 @@ function collect(input: JSX.Element | (() => JSX.Element)): {
 	return { root, effects };
 }
 
-export function onWindow(fn: Effect) {
+function onWindow(fn: Effect) {
 	if (!__CURRENT_EFFECTS) {
 		throw new UIError("onWindow must be used inside collect()");
 	} else {
 		__CURRENT_EFFECTS.push(fn);
 	}
 }
+
+export { drawSVG } from "./lib/svg";
+export type { ScriptUIElement, ScriptUIElements, ScriptUIElementTagName };
+export { jsx, createWindow, onWindow, uniqueId };
