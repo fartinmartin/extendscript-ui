@@ -11,21 +11,37 @@ export class UIError extends Error {
 export function noop() {}
 
 // TODO: add to extendscript-ponyfills
-export function stringify(o: any) {
+export function stringify(o: any): string | undefined {
+	if (o && typeof o.toJSON === "function") {
+		o = o.toJSON();
+	}
+
+	if (o === null) return "null";
 	if (typeof o === "string") return '"' + o + '"';
-	if (typeof o !== "object" || o === null) return String(o);
+	if (typeof o === "number" || typeof o === "boolean") return String(o);
+	if (typeof o === "function" || typeof o === "undefined") return undefined;
 
-	let s =
-		o instanceof String || o instanceof Number || o instanceof Boolean
-			? o.valueOf().toSource()
-			: o.toSource();
+	if (o instanceof Array) {
+		var out = [];
+		for (var i = 0; i < o.length; i++) {
+			var v = stringify(o[i]);
+			out.push(v === undefined ? "null" : v);
+		}
+		return "[" + out.join(",") + "]";
+	}
 
-	s = s
-		.replace(/^\(+|\)+$/g, "")
-		.replace(/'([^']*)'/g, '"$1"')
-		.replace(/([{\[,]\s*)([A-Za-z0-9_]+)\s*:/g, '$1"$2":');
+	var out = [];
+	for (var k in o) {
+		if (Object.prototype.hasOwnProperty.call(o, k)) {
+			var val = o[k];
+			if (typeof val !== "function" && typeof val !== "undefined") {
+				var v = stringify(val);
+				if (v !== undefined) out.push('"' + k + '":' + v);
+			}
+		}
+	}
 
-	return s;
+	return "{" + out.join(",") + "}";
 }
 
 // TODO: add to extendscript-ponyfills
