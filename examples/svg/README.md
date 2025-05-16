@@ -18,7 +18,7 @@ const Smiley = ({ fill, stroke }: { fill: string, stroke: string }) => (
 
 <!-- prettier-ignore -->
 > [!NOTE]
-> `extendscript-ui` only supports a limited number of SVG elements and attributes. Documentation is coming, but for now you can check the source!
+> `extendscript-ui` only supports a limited number of SVG elements and attributes. Documentation is coming, but for now you can check [the source](/src/jsx/elements/svg.ts)!
 
 ## Development
 
