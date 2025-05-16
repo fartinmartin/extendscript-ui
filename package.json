@@ -1,26 +1,27 @@
 {
-	"name": "extendscript-ui",
-	"version": "0.0.7",
-	"description": "JSX templating for Adobe ExtendScript",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
-	"scripts": {
-		"clean": "rm -rf dist",
-		"build": "npm run clean && rollup -c",
-		"dev": "rollup -cw",
-		"release": "npm run build && npm publish"
-	},
-	"author": "Martin Lindberg",
-	"license": "MIT",
-	"devDependencies": {
-		"@rollup/plugin-typescript": "^12.1.1",
-		"rollup": "^4.27.4",
-		"rollup-plugin-copy": "^3.5.0",
-		"tslib": "^2.8.1",
-		"types-for-adobe": "^7.2.3",
-		"typescript": "^5.7.2"
-	},
-	"dependencies": {
-		"extendscript-ponyfills": "^1.1.1"
-	}
+  "name": "extendscript-ui",
+  "version": "0.0.8",
+  "description": "JSX templating for Adobe ExtendScript",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && rollup -c",
+    "dev": "rollup -cw",
+    "bump": "node --experimental-strip-types scripts/version.ts",
+    "release": "npm run build && npm publish"
+  },
+  "author": "Martin Lindberg",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^12.1.1",
+    "rollup": "^4.27.4",
+    "rollup-plugin-copy": "^3.5.0",
+    "tslib": "^2.8.1",
+    "types-for-adobe": "^7.2.3",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "extendscript-ponyfills": "^1.1.1"
+  }
 }
