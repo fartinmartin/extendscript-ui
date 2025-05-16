@@ -1,6 +1,6 @@
 {
   "name": "@extendscript-ui/example-basic",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "main": "dist/index.jsx",
   "scripts": {
     "dev": "rollup -cw",
@@ -15,6 +15,6 @@
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "extendscript-ui": "0.0.8"
+    "extendscript-ui": "0.0.9"
   }
 }
