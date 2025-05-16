@@ -60,22 +60,19 @@ export function createCmds(g: ScriptUIGraphics) {
 		},
 
 		Q: ([x1, y1, x, y]) => {
-			for (let t = 0.1; t <= 1; t += 0.1) {
-				const pt = quadPoint(last, [x1, y1], [x, y], t);
-				g.lineTo(pt[0], pt[1]);
-			}
-			last = [x, y] as Point;
-			lastCtrl = [x1, y1] as Point;
+			const ctrl: Point = [x1, y1] as Point;
+			const end: Point = [x, y] as Point;
+			drawQuadraticCurve(g, last, ctrl, end);
+			last = end;
+			lastCtrl = ctrl;
 		},
+
 		q: ([x1, y1, x, y]) => {
-			const p1 = [last[0] + x1, last[1] + y1];
-			const p = [last[0] + x, last[1] + y];
-			for (let t = 0.1; t <= 1; t += 0.1) {
-				const pt = quadPoint(last, p1, p, t);
-				g.lineTo(pt[0], pt[1]);
-			}
-			last = p as Point;
-			lastCtrl = p1 as Point;
+			const ctrl: Point = [last[0] + x1, last[1] + y1] as Point;
+			const end: Point = [last[0] + x, last[1] + y] as Point;
+			drawQuadraticCurve(g, last, ctrl, end);
+			last = end;
+			lastCtrl = ctrl;
 		},
 
 		T: ([x, y]) => {
@@ -169,4 +166,20 @@ function arcToSegments(
 	}
 
 	return points;
+}
+
+//
+
+function drawQuadraticCurve(
+	g: ScriptUIGraphics,
+	from: Point,
+	ctrl: Point,
+	to: Point,
+	steps: number = 10,
+) {
+	for (let i = 1; i <= steps; i++) {
+		const t = i / steps;
+		const pt = quadPoint(from, ctrl, to, t);
+		g.lineTo(pt[0], pt[1]);
+	}
 }

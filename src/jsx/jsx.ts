@@ -18,7 +18,10 @@ import {
 } from "../lib/utils";
 
 // TODO: put these on $[`extendscript-ui`]?
-const __EVENT_HANDLERS: Record<string, { type: string; fn: () => void }> = {};
+const __EVENT_HANDLERS: Record<
+	string,
+	Partial<Record<string, () => void>>
+> = {};
 let __CURRENT_EFFECTS: Effect[] | null = null;
 
 export function jsx<K extends SVGElementTagName>(
@@ -53,10 +56,8 @@ export function jsx(
 
 	for (const prop in attributes) {
 		if (startsWith(prop, "on")) {
-			__EVENT_HANDLERS[id] = {
-				type: prop /* @ts-ignore */,
-				fn: attributes[prop],
-			}; /* @ts-ignore */
+			__EVENT_HANDLERS[id] ??= {};
+			__EVENT_HANDLERS[id][prop] = attributes[prop] as () => void;
 			delete attributes[prop];
 		}
 	}
@@ -154,10 +155,13 @@ export function createWindow(node: JSX.Element | (() => JSX.Element)) {
 		forEach(effects, (fn) => fn(window));
 
 		for (const elementName in __EVENT_HANDLERS) {
-			const cb = __EVENT_HANDLERS[elementName];
 			/* @ts-ignore https://github.com/docsforadobe/Types-for-Adobe/pull/142 */
 			const el = window.findElement(elementName);
-			el[cb.type] = cb.fn;
+			if (!el) continue;
+			const handlers = __EVENT_HANDLERS[elementName];
+			for (const eventType in handlers) {
+				el[eventType] = handlers[eventType];
+			}
 		}
 
 		return window;

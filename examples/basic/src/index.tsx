@@ -90,6 +90,5 @@ const ExampleUI = () => {
 	);
 };
 
-(function (thisObj) {
-	createWindow(ExampleUI).show();
-})(this);
+const window = createWindow(ExampleUI);
+window.show();

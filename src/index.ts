@@ -1,5 +1,6 @@
 export { jsx, createWindow, onWindow } from "./jsx/jsx";
 export { drawSVG, SVG } from "./svg/draw";
+export { svgColors } from "./svg/colors";
 
 export { uniqueId } from "./lib/utils";
 

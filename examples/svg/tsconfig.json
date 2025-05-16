@@ -5,10 +5,10 @@
 		"moduleResolution": "node",
 		"strict": true,
 		"noLib": true,
-		"types": ["AfterEffects/23.0", "types/jsx.d.ts"],
+		"types": ["AfterEffects/23.0", "extendscript-ui.d.ts"],
 		"typeRoots": [
 			"./node_modules/types-for-adobe/",
-			"./node_modules/extendscript-ui/dist"
+			"./node_modules/extendscript-ui/dist/jsx"
 		],
 		"jsx": "react",
 		"jsxFactory": "jsx"
