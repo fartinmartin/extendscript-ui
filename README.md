@@ -1,6 +1,6 @@
 # `extendscript-ui`
 
-## JSX templating for ScriptUI/ExtendScript
+## Declarative templating for ScriptUI/ExtendScript
 
 Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
 
@@ -99,20 +99,20 @@ Be sure to use `.tsx` files for JSX syntax highlighting. Import `jsx` to satisfy
 // index.tsx
 import { jsx } from "extendscript-ui";
 
-export const ui = (
+export const ExampleUI = (
   <dialog text="Neat!" properties={{ closeButton: true }}>
     <button text="Click me!" onClick={() => alert("Doink!")} />
   </dialog>
 );
 ```
 
-Use `createWindow` to render your template. This will create a `Window`, wire up your event callbacks, and return the `Window`.
+Then, use `createWindow` to render your template. This will create a `Window`, wire up your event callbacks, and return the `Window`.
 
 <!-- prettier-ignore -->
 ```tsx
 import { createWindow } from "extendscript-ui";
 
-const window = createWindow(ui);
+const window = createWindow(ExampleUI); // ExampleUI from previous code block
 window.show();
 ```
 
