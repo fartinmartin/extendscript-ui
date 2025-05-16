@@ -1,0 +1,2 @@
+overrides:
+  extendscript-ui: link:../../../../../Library/pnpm/global/5/node_modules/extendscript-ui

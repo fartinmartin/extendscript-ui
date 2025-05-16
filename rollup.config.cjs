@@ -14,7 +14,13 @@ module.exports = [
 		plugins: [
 			typescript(),
 			copy({
-				targets: [{ src: "src/types/jsx.d.ts", dest: "dist/types" }],
+				targets: [
+					{
+						src: "src/jsx/jsx.d.ts",
+						dest: "dist/jsx/",
+						rename: "extendscript-ui.d.ts",
+					},
+				],
 			}),
 		],
 	},
