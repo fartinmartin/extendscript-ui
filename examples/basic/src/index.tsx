@@ -49,6 +49,7 @@ const ExampleUI = () => {
 			onClose={() => {
 				alert("See ya!");
 				/**
+				 * types-for-adobe thinks we _must_ return boolean—this is not the case!
 				 * once this PR is published to npm we can remove `return true`! https://github.com/docsforadobe/Types-for-Adobe/pull/141
 				 * e.g: we are waiting for version > 7.2.3 on npmjs: https://www.npmjs.com/package/types-for-adobe
 				 */

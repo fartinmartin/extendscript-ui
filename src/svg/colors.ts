@@ -1,3 +1,5 @@
+import { map, startsWith, trim } from "extendscript-ponyfills";
+
 // https://www.w3.org/TR/SVG11/types.html#ColorKeywords
 export const svgColors: Record<string, string> = {
 	aliceblue: "#f0f8ff",
@@ -149,3 +151,36 @@ export const svgColors: Record<string, string> = {
 	yellow: "#ffff00",
 	yellowgreen: "#9acd32",
 };
+
+export function parseColor(string: string): [number, number, number, number] {
+	const expandHex = (hex: string) =>
+		hex.length === 4
+			? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`
+			: hex;
+
+	const hexToRgba = (hex: string): [number, number, number, number] => {
+		const h = expandHex(hex).slice(1);
+		const r = parseInt(h.slice(0, 2), 16) / 255;
+		const g = parseInt(h.slice(2, 4), 16) / 255;
+		const b = parseInt(h.slice(4, 6), 16) / 255;
+		const a = h.length === 8 ? parseInt(h.slice(6, 8), 16) / 255 : 1;
+		return [r, g, b, a];
+	};
+
+	const rgbToRgba = (rgb: string): [number, number, number, number] => {
+		const m = rgb.match(/rgba?\(([^)]+)\)/);
+		if (!m) throw new Error("Invalid rgb format");
+		const parts = map(m[1].split(","), (s) => trim(s));
+		const [r, g, b] = map(parts.slice(0, 3), Number);
+		const a = parts[3] !== undefined ? parseFloat(parts[3]) : 1;
+		return [r, g, b, a];
+	};
+
+	string = string.toLowerCase();
+
+	if (svgColors[string]) return hexToRgba(svgColors[string]);
+	if (startsWith(string, "#")) return hexToRgba(string);
+	if (startsWith(string, "rgb")) return rgbToRgba(string);
+
+	throw new Error("Unsupported color format");
+}

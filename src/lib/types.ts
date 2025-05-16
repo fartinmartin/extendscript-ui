@@ -1,3 +1,5 @@
+// helper types (re)written for extendscript
+
 export type Exclude<T, U> = T extends U ? never : T;
 
 export type Parameters<T> = T extends (...args: infer P) => any ? P : never;
@@ -20,3 +22,7 @@ export type OnlyProperties<T> = Pick<T, NonFunctionKeys<T>>;
 
 export type InstanceProps<T extends { new (...args: any[]): any }> =
 	OnlyProperties<InstanceType<T>>;
+
+export type Prettify<T> = {
+	[K in keyof T]: T[K];
+} & {};

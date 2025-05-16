@@ -10,11 +10,12 @@ export class UIError extends Error {
 
 export function noop() {}
 
+// TODO: add to extendscript-ponyfills
 export function stringify(o: any) {
 	if (typeof o === "string") return '"' + o + '"';
 	if (typeof o !== "object" || o === null) return String(o);
 
-	var s =
+	let s =
 		o instanceof String || o instanceof Number || o instanceof Boolean
 			? o.valueOf().toSource()
 			: o.toSource();
@@ -27,21 +28,30 @@ export function stringify(o: any) {
 	return s;
 }
 
-export function mapProps<T extends any>(
-	obj: any,
-	callback: (key: string, value: any) => T,
-) {
-	var result = [];
-	for (var key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			result.push(callback(key, obj[key]));
+// TODO: add to extendscript-ponyfills
+export function entries<T extends Record<string, any>>(
+	o: T,
+): [keyof T, T[keyof T]][] {
+	const result: [keyof T, T[keyof T]][] = [];
+	for (const key in o) {
+		if (o.hasOwnProperty(key)) {
+			result.push([key as keyof T, o[key]]);
 		}
 	}
 	return result;
 }
 
-export function uuid(prefix = "id") {
-	return prefix + "_" + Math.floor(Math.random() * 9999);
+export function mapProps<T extends any>(
+	obj: any,
+	callback: (key: string, value: any) => T,
+) {
+	const result = [];
+	for (const key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			result.push(callback(key, obj[key]));
+		}
+	}
+	return result;
 }
 
 export function capitalize(str: string) {

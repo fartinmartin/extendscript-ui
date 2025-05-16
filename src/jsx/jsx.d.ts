@@ -1,8 +1,13 @@
-import { ScriptUIElement, ScriptUIElementTagName, ScriptUIElements } from "..";
+import {
+	ScriptUIElement,
+	ScriptUIElementTagName,
+	ScriptUIElements,
+} from "./elements/scriptui";
+import { SVGElements, SVGElementTagName } from "./elements/svg";
 
 declare global {
 	namespace JSX {
-		type Element = ScriptUIElement & { spec: string; id: string };
+		type Element = string | (ScriptUIElement & { spec: string; id: string });
 
 		interface IntrinsicElements extends IntrinsicElementMap {}
 
@@ -10,6 +15,8 @@ declare global {
 			[K in ScriptUIElementTagName]: ScriptUIElements[K] & {
 				children?: ScriptUIElement[];
 			};
+		} & {
+			[K in SVGElementTagName]: SVGElements[K];
 		};
 
 		type Tag = keyof JSX.IntrinsicElements;
@@ -17,7 +24,7 @@ declare global {
 		interface Component {
 			(
 				attributes?: { [key: string]: any },
-				children?: ScriptUIElement[]
+				children?: ScriptUIElement[],
 			): ScriptUIElement;
 		}
 	}

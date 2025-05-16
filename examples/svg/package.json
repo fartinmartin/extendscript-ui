@@ -1,5 +1,5 @@
 {
-	"name": "@extendscript-ui/example-basic",
+	"name": "@extendscript-ui/example-svg",
 	"version": "1.0.0",
 	"main": "dist/index.jsx",
 	"scripts": {
