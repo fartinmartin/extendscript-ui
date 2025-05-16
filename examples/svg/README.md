@@ -11,6 +11,7 @@ This example renders a basic `Palette` with a SVG-like graphic. `extendscript-ui
 const Smiley = ({ fill, stroke }: { fill: string, stroke: string }) => (
   <svg>
     <circle cx="75" cy="75" r="70" fill={fill} stroke={stroke} stroke-width="10" />
+    {/* other shapes! */}
   </svg>
 ));
 ```

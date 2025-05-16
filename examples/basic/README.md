@@ -48,10 +48,10 @@ Here's a complete rundown of the `tsconfig.json`:
     // since we aren't including any types by default (noLib: true), we should
     // tell TypeScript what types we DO want to include. first, defining
     // what folders to look in...
-		"typeRoots": [
-			"./node_modules/types-for-adobe/",
-			"./node_modules/extendscript-ui/dist/jsx"
-		],
+    "typeRoots": [
+      "./node_modules/types-for-adobe/",
+      "./node_modules/extendscript-ui/dist/jsx"
+    ],
     // ...and then what sub-folders/files to look for within those typeRoots folders
     "types": ["AfterEffects/23.0", "extendscript-ui.d.ts"],
 
