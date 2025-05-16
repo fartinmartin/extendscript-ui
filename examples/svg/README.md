@@ -19,6 +19,14 @@ const Smiley = ({ fill, stroke }: { fill: string, stroke: string }) => (
 > [!NOTE]
 > `extendscript-ui` only supports a limited number of SVG elements and attributes. Documentation is coming, but for now you can check [the source](/src/jsx/elements/svg.ts)!
 
+You can swap the Smiley SVG with the SVGTestUI to see other SVG renders:
+
+```diff
+// src/index.tsx
++ // const window = createWindow(ExampleUI);
++ const window = createWindow(SVGTestUI);
+```
+
 ## Development
 
 Check out [`/examples/basic`](/examples/basic) for notes on the development setup.
