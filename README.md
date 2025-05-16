@@ -53,7 +53,7 @@ That's not enough? What if you could render SVGs? (You can!)
 
 <!-- prettier-ignore -->
 ```tsx
-const Smiley = ({ fill, stroke }: { fill: string, stroke: string }) => (
+const MySVG = ({ fill, stroke }: { fill: string, stroke: string }) => (
   <svg>
     <circle cx="75" cy="75" r="70" fill={fill} stroke={stroke} stroke-width="10" />
   </svg>
@@ -137,7 +137,7 @@ onWindow((window) => {
 ```
 
 > [!TIP]
-> ScriptUI has a helpful `findElement` method to use inside this hook! `extendscript-ui` also exports a `uniqueId` helper to ensure element `properties.name` values are valid.
+> ScriptUI has a helpful [`findElement` method](https://extendscript.docsforadobe.dev/user-interface-tools/window-object/#findelement) to use inside this hook! `extendscript-ui` also exports a `uniqueId` helper to ensure element `properties.name` values are valid.
 
 <!-- prettier-ignore -->
 ```tsx
@@ -167,4 +167,4 @@ const MyText = ({ text, properties }) => {
 - [ ] Figure out `TreeView | ListBox | DropDownList` rendering
 - [ ] Remove `type` attribute from native types since it's defined by tag?
 - [ ] ProgressBar helpers?
-- [ ] ...?
+- [ ] Turn these TODOs into issues...?
