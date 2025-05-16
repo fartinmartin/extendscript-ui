@@ -49,6 +49,17 @@ const MyButton = ({ text, onClick }: ScriptUIElements["button"]) => {
 };
 ```
 
+That's not enough? What if you could render SVGs? (You can!)
+
+<!-- prettier-ignore -->
+```tsx
+const Smiley = ({ fill, stroke }: { fill: string, stroke: string }) => (
+  <svg>
+    <circle cx="75" cy="75" r="70" fill={fill} stroke={stroke} stroke-width="10" />
+  </svg>
+));
+```
+
 ## Try it
 
 > [!TIP]
