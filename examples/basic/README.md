@@ -8,7 +8,10 @@ This example renders a basic `Dialog` with several `Button`s grouped within two 
 
 ## Development
 
-The project uses [Rollup](https://rollupjs.org/) with as few dependencies and config as I could manage! It builds a single `dist/basic-v{#.#.#}.jsx` file that you can run in **After Effects** via `File > Scripts > Run Script File...`
+The project uses [Rollup](https://rollupjs.org/) with as few dependencies and config as I could manage! It builds an IIFE to `dist/basic-v{#.#.#}.jsx` that you can run in **After Effects** via `File > Scripts > Run Script File...`
+
+> [!TIP]
+> Why an IIFE? Check out [hyperbrew](https://hyperbrew.co/blog/top-2-extendscript-mistakes-and-how-to-avoid-them/)'s post on global namespace pollution.
 
 Here's a rundown of the dependencies:
 
