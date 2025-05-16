@@ -153,7 +153,7 @@ function drawPolyline(node: Node, g: ScriptUIGraphics) {
 function drawPath(node: Node, g: ScriptUIGraphics) {
 	const d = String(node["@d"]);
 
-	const cmdString = d.match(/[MLCQZHVSTmlcqzhvst][^MLCQZHVSTmlcqzhvst]*/g);
+	const cmdString = d.match(/[mlcqzvhsta][^mlcqzvhsta]*/gi);
 	if (!cmdString) return;
 
 	const cmds = createCmds(g);

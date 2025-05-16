@@ -13,6 +13,7 @@ declare global {
 
 		type IntrinsicElementMap = {
 			[K in ScriptUIElementTagName]: ScriptUIElements[K] & {
+				// key?: string | number;
 				children?: ScriptUIElement[];
 			};
 		} & {

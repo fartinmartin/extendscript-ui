@@ -1,5 +1,6 @@
 import { jsx, createWindow, onWindow } from "extendscript-ui";
 import { SVG, drawSVG, svgColors } from "extendscript-ui";
+import { SVGTestUI } from "./svgs";
 
 const Smiley = SVG(({ fill, stroke }: { fill?: string; stroke?: string }) => {
 	const strokeWidth = 8;
@@ -56,4 +57,5 @@ const ExampleUI = () => {
 };
 
 const window = createWindow(ExampleUI);
+// const window = createWindow(SVGTestUI);
 window.show();

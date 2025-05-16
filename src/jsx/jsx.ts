@@ -1,6 +1,14 @@
 /// <reference path="./jsx.d.ts" />
 
-import { forEach, includes, map, startsWith } from "extendscript-ponyfills";
+import {
+	flat,
+	forEach,
+	includes,
+	isArray,
+	map,
+	reduce,
+	startsWith,
+} from "extendscript-ponyfills";
 import { SVGElements, SVGElementTagName, SVG_TAGS } from "./elements/svg";
 import {
 	ScriptUIElement,
@@ -39,6 +47,18 @@ export function jsx(
 	attributes: any,
 	...children: any[]
 ): string | JSX.Element {
+	const flattenChildren = (items: any[]): any[] =>
+		reduce(
+			items,
+			(acc, item) => {
+				if (isArray(item)) return acc.concat(flattenChildren(item));
+				return acc.concat(item);
+			},
+			[],
+		);
+
+	children = flattenChildren(children);
+
 	if (typeof tagName === "string" && includes(SVG_TAGS, tagName)) {
 		const pairs = entries(attributes || {});
 		const attrs = map(pairs, ([k, v]) => `${String(k)}="${v}"`).join(" ");
