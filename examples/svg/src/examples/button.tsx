@@ -1,13 +1,13 @@
 import { jsx, onWindow } from "extendscript-ui";
 import { SVG, drawSVG } from "extendscript-ui";
 
-interface TextButtonProps {
+interface SVGTextProps {
 	text: string;
 	background: string;
 	color: string;
 }
 
-const TextButton = SVG(({ text, background, color }: TextButtonProps) => {
+const SVGText = SVG(({ text, background, color }: SVGTextProps) => {
 	const size = [300, 100];
 	return (
 		<svg>
@@ -56,7 +56,7 @@ export const ButtonUI = () => {
 						disabled: { background: "lightgray", color: "gray" },
 					}[state]!;
 
-					drawSVG(TextButton({ text: "Hello!", ...styles }), this.graphics);
+					drawSVG(SVGText({ text: "Hello!", ...styles }), this.graphics);
 				}}
 			></button>
 			<button
