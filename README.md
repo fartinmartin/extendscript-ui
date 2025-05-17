@@ -71,7 +71,7 @@ const MySVG = ({ fill, stroke }: { fill: string, stroke: string }) => (
 ## Try it
 
 > [!TIP]
-> Want to skip all this setup? Jump right into the [`/examples/basic`](/examples/basic) project!
+> Want to skip all this setup? Jump right into an [`/examples`](/examples) project!
 
 ### Prerequisites
 
