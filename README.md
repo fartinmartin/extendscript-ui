@@ -6,12 +6,6 @@ Declarative templating for ScriptUI/ExtendScript
 
 ![example windows](images/example.png)
 
----
-
-### [✨ Download eBox ✨](https://github.com/motiondeveloper/eBox/releases)<!-- omit in toc -->
-
----
-
 </div>
 
 Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
