@@ -1,6 +1,7 @@
 import { map, reduce, trim } from "extendscript-ponyfills";
 import { parseColor } from "./colors";
 import { createCmds } from "./cmds";
+import { Anchor, getTextPosition } from "./text";
 
 export function drawSVG(svg: string | XML, g: ScriptUIGraphics) {
 	const root = parseSVG(svg);
@@ -174,6 +175,7 @@ function drawPath(node: Node, g: ScriptUIGraphics) {
 function drawText(node: Node, g: ScriptUIGraphics) {
 	const x = +node["@x"] || 0;
 	const y = +node["@y"] || 0;
+	const anchor = (String(node["@text-anchor"]) || "tl") as Anchor;
 	const text = String(node.text());
 
 	const fontSize = +node["@font-size"] || g.font.size;
@@ -185,11 +187,18 @@ function drawText(node: Node, g: ScriptUIGraphics) {
 	/* @ts-ignore https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-class/#scriptuifontstyle */
 	const { REGULAR, BOLD, ITALIC, BOLDITALIC } = ScriptUI.FontStyle;
 	let style = REGULAR;
-	if (w === "bold") style = BOLD;
 	if (s === "italic") style = ITALIC;
-	if (s === "italic" && w === "bold") style = BOLDITALIC;
+	if (w === "bold" || s === "bold") style = BOLD;
+	if (s === "italic" && style === "bold") style = BOLDITALIC;
 
 	const font = ScriptUI.newFont(family, style, fontSize);
+	const position = getTextPosition(text, g, {
+		origin: [x, y],
+		anchor,
+		fontSize,
+		fontFamily: family,
+		fontStyle: style,
+	});
 
 	const { fill } = parseStyle(node, g);
 	const penColor = fill ? fill.color : [0, 0, 0, 1];
@@ -197,7 +206,7 @@ function drawText(node: Node, g: ScriptUIGraphics) {
 	const p = g.PenType.SOLID_COLOR;
 	const pen = g.newPen(p, penColor, 1);
 
-	g.drawString(text, pen, x, y, font);
+	g.drawString(text, pen, position.x, position.y, font);
 }
 
 function drawImage(node: Node, g: ScriptUIGraphics) {

@@ -42,7 +42,7 @@ const ExampleUI = () => {
 	});
 
 	return (
-		<palette text="SVG!" orientation={"row"}>
+		<palette text="SVG!" orientation="row">
 			<button
 				size={[150, 150]}
 				properties={{ name: "my_button" }}
@@ -56,5 +56,5 @@ const ExampleUI = () => {
 	);
 };
 
-const window = createWindow(ExampleUI);
+const window = createWindow(SVGTestUI);
 window.show();

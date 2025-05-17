@@ -18,7 +18,7 @@ You can even create functional components:
 <!-- prettier-ignore -->
 ```tsx
 const Header = ({ text }: { text: string }) => (
-  <group orientation={"row"} alignChildren={"fill"}>
+  <group orientation="row" alignChildren="fill">
     <static-text text={text}></static-text>
   </group>
 );

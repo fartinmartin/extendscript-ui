@@ -1,9 +1,11 @@
-// https://www.w3.org/TR/SVG11/eltindex.html
 import { Prettify } from "../../lib/types";
+import { Anchor } from "../../svg/text";
 
 // export type SVGElement = string; // maybe?
 export type SVGElementTagName = keyof SVGElements;
 
+// https://www.w3.org/TR/SVG11/eltindex.html
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute
 type SVGAttributes = {
 	fill?: string;
 	stroke?: string;
@@ -72,7 +74,13 @@ export type SVGElements = {
 			y?: number | string;
 			dx?: number | string;
 			dy?: number | string;
-			textAnchor?: string;
+			"text-anchor"?: Anchor;
+			"font-family"?: string;
+			"font-style"?: "normal" | "italic" | "bold" | "oblique";
+			"font-size"?: number | string;
+			"font-weight"?: string;
+			// TODO: support font-weight="100" - "900"?
+			// "font-weight"?: number | string;
 		}
 	>;
 };

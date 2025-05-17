@@ -2,7 +2,7 @@ import { jsx, createWindow, onWindow, uniqueId } from "extendscript-ui";
 import type { ScriptUIElements } from "extendscript-ui";
 
 const Header = ({ text }: { text: string }) => (
-	<group orientation={"row"} alignChildren={"fill"}>
+	<group orientation="row" alignChildren="fill">
 		<static-text text={text}></static-text>
 	</group>
 );
@@ -57,11 +57,11 @@ const ExampleUI = () => {
 			}}
 		>
 			<Header text="Could it be?!" />
-			<group orientation={"column"} alignChildren={"fill"}>
+			<group orientation="column" alignChildren="fill">
 				<panel
 					text="Wow, a panel!"
-					orientation={"row"}
-					alignChildren={"top"}
+					orientation="row"
+					alignChildren="top"
 					margins={20}
 				>
 					<MyButton
@@ -81,7 +81,7 @@ const ExampleUI = () => {
 						onClick={() => alert("Hi!")}
 					/>
 				</panel>
-				<panel text="No way, another panel?!" orientation={"row"} margins={20}>
+				<panel text="No way, another panel?!" orientation="row" margins={20}>
 					<button text="OK" properties={{ name: "ok" }} />
 					<button text="Cancel" properties={{ name: "cancel" }} />
 				</panel>
