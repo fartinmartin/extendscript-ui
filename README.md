@@ -17,15 +17,15 @@ You can even create functional components:
 
 <!-- prettier-ignore -->
 ```tsx
-const Header = ({ text }: { text: string }) => (
+const MyHeader = ({ text }: { text: string }) => (
   <group orientation="row" alignChildren="fill">
     <static-text text={text}></static-text>
   </group>
 );
 
-const ui = (
+const MyUI = (
   <dialog text="Could it be?!" properties={{ resizeable: true }}>
-    <Header text="Neat!" />
+    <MyHeader text="Neat!" />
   </dialog>
 );
 ```

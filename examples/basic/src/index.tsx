@@ -1,7 +1,7 @@
 import { jsx, createWindow, onWindow, uniqueId } from "extendscript-ui";
 import type { ScriptUIElements } from "extendscript-ui";
 
-const Header = ({ text }: { text: string }) => (
+const MyHeader = ({ text }: { text: string }) => (
 	<group orientation="row" alignChildren="fill">
 		<static-text text={text}></static-text>
 	</group>
@@ -56,7 +56,7 @@ const ExampleUI = () => {
 				return true;
 			}}
 		>
-			<Header text="Could it be?!" />
+			<MyHeader text="Could it be?!" />
 			<group orientation="column" alignChildren="fill">
 				<panel
 					text="Wow, a panel!"
