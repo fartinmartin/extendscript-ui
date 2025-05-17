@@ -1,6 +1,9 @@
 # `extendscript-ui`
 
-## Declarative templating for ScriptUI/ExtendScript
+<p align="center">
+  <img src="example.png" width="300" alt="screenshot of svg palette"/>
+  ## Declarative templating for ScriptUI/ExtendScript
+</p>
 
 Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
 

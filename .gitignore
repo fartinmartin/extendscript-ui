@@ -1,4 +1,5 @@
 **/*/pnpm-workspace.yaml
+**/*/*.psd
 
 # Logs
 logs

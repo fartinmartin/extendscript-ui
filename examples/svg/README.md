@@ -1,8 +1,7 @@
 # `@extendscript-ui/svg`
 
 <p align="center">
-	<img src="images/svg.png" height="300" alt="screenshot of svg palette" align="left"/>
-	<img src="images/btn.png" height="300" alt="screenshot of svg palette" align="left"/>
+  <img src="example.png" width="300" alt="screenshot of svg palette"/>
 </p>
 
 This example renders a basic `Palette` with an SVG-like graphic. `extendscript-ui`'s JSX gives us SVG syntax highlighting and type hinting. Plus, since components are functions, we can create dynamic SVGs!
