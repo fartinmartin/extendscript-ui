@@ -65,8 +65,12 @@ export const ButtonUI = () => {
 					enabled = !enabled;
 					this.text = enabled ? "🔒 Disable" : "🔓 Enable";
 					if (button) {
-						button.notify("onDraw");
 						button.enabled = enabled;
+						/*
+						 * setting `button.enabled` will trigger `button.onDraw`,
+						 * but, if you ever need to force `onDraw` you can use:
+						 * `button.notify("onDraw")`
+						 */
 					}
 				}}
 			></button>
