@@ -49,7 +49,7 @@ const MyButton = ({ text, onClick }: ScriptUIElements["button"]) => {
 };
 ```
 
-That's not enough? What if you could render SVGs? (You can!)
+That's not enough, you say? What if you could render SVGs? (You can!)
 
 <!-- prettier-ignore -->
 ```tsx
