@@ -11,7 +11,7 @@
     "@rollup/plugin-typescript": "^12.1.1",
     "rollup": "^4.28.0",
     "tslib": "^2.8.1",
-    "types-for-adobe": "^7.2.3",
+    "types-for-adobe": "^7.2.4",
     "typescript": "5.4.5"
   },
   "dependencies": {

@@ -101,7 +101,7 @@ export const SVGTestUI = () => {
 				{map(SVGTestComponents, (svg, i) => (
 					<button
 						size={[100, 100]}
-						onDraw={function (this: Button) {
+						onDraw={function (this: Button /*, drawState: DrawState */) {
 							drawSVG(svg({}), this.graphics);
 						}}
 					></button>
@@ -110,7 +110,7 @@ export const SVGTestUI = () => {
 			<group orientation="row">
 				<button
 					size={[100, 100]}
-					onDraw={function (this: Button) {
+					onDraw={function (this: Button /*, drawState: DrawState */) {
 						drawSVG(TestText({ text: "hello" }), this.graphics);
 					}}
 				></button>

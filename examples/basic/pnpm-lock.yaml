@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  extendscript-ui: link:../../../../../Library/pnpm/global/5/node_modules/extendscript-ui
-
 importers:
 
   .:
@@ -28,7 +25,7 @@ importers:
         specifier: ^2.8.1
         version: 2.8.1
       types-for-adobe:
-        specifier: ^7.2.3
+        specifier: ^7.2.4
         version: 7.2.4
       typescript:
         specifier: 5.4.5

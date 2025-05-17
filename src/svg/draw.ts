@@ -162,7 +162,7 @@ function drawPath(node: Node, g: ScriptUIGraphics) {
 
 	for (const seg of cmdString) {
 		const cmd = seg[0];
-		/* @ts-ignore split works with RegExp */
+		/* @ts-ignore split works with RegExp: https://github.com/docsforadobe/Types-for-Adobe/pull/146 */
 		const nums = map(trim(seg.slice(1)).split(/[\s,]+/), Number);
 		if (cmd in cmds) cmds[cmd as keyof typeof cmds]?.(nums);
 	}
@@ -184,7 +184,11 @@ function drawText(node: Node, g: ScriptUIGraphics) {
 	const w = String(node["@font-weight"]);
 	const s = String(node["@font-style"]);
 
-	/* @ts-ignore https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-class/#scriptuifontstyle */
+	/*
+	 * https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-class/#scriptuifontstyle
+	 * https://github.com/docsforadobe/Types-for-Adobe/pull/148
+	 */
+	/* @ts-ignore */
 	const { REGULAR, BOLD, ITALIC, BOLDITALIC } = ScriptUI.FontStyle;
 	let style = REGULAR;
 	if (s === "italic") style = ITALIC;
@@ -202,7 +206,7 @@ function drawText(node: Node, g: ScriptUIGraphics) {
 
 	const { fill } = parseStyle(node, g);
 	const penColor = fill ? fill.color : [0, 0, 0, 1];
-	/* @ts-ignore */
+	/* @ts-ignore https://github.com/docsforadobe/Types-for-Adobe/pull/148 */
 	const p = g.PenType.SOLID_COLOR;
 	const pen = g.newPen(p, penColor, 1);
 
@@ -233,11 +237,11 @@ function parseStyle(node: Node, g: ScriptUIGraphics) {
 	const f = String(node["@fill"]);
 	const s = String(node["@stroke"]);
 
-	/* @ts-ignore */
+	/* @ts-ignore https://github.com/docsforadobe/Types-for-Adobe/pull/148 */
 	const b = g.BrushType.SOLID_COLOR;
 	const fill = f && f !== "none" ? g.newBrush(b, parseColor(f)) : null;
 
-	/* @ts-ignore */
+	/* @ts-ignore https://github.com/docsforadobe/Types-for-Adobe/pull/148 */
 	const p = g.PenType.SOLID_COLOR;
 	const w = +node["@stroke-width"] || 1;
 	const stroke = s && s !== "none" ? g.newPen(p, parseColor(s), w) : null;
@@ -247,7 +251,7 @@ function parseStyle(node: Node, g: ScriptUIGraphics) {
 
 function parsePoints(attr?: string): [number, number][] {
 	if (!attr) return [];
-	/* @ts-ignore */
+	/* @ts-ignore https://github.com/docsforadobe/Types-for-Adobe/pull/146 */
 	const points = trim(attr).split(/[\s,]+/);
 	return reduce(
 		points,

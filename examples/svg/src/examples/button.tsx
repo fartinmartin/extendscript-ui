@@ -40,7 +40,7 @@ export const ButtonUI = () => {
 				size={[300, 100]}
 				properties={{ name: "my_button" }}
 				onClick={() => alert("Hello!")}
-				/* @ts-ignore onDraw does indeed pass `drawState` */
+				/* @ts-ignore onDraw does indeed pass `drawState`: https://github.com/docsforadobe/Types-for-Adobe/pull/147 */
 				onDraw={function (this: Button, drawState: DrawState) {
 					let state = "base";
 					if (drawState.mouseOver) state = "hover";
