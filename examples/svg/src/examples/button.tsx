@@ -38,7 +38,6 @@ export const ButtonUI = () => {
 		<dialog text="Button" orientation="column">
 			<button
 				size={[300, 100]}
-				enabled={enabled}
 				properties={{ name: "my_button" }}
 				onClick={() => alert("Hello!")}
 				/* @ts-ignore onDraw does indeed pass `drawState` */
@@ -66,7 +65,7 @@ export const ButtonUI = () => {
 					enabled = !enabled;
 					this.text = enabled ? "🔒 Disable" : "🔓 Enable";
 					if (button) {
-						button?.notify("onDraw");
+						button.notify("onDraw");
 						button.enabled = enabled;
 					}
 				}}
