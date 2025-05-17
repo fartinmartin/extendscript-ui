@@ -1,6 +1,6 @@
 # `extendscript-ui`
 
-## Declarative templating for ScriptUI/ExtendScript <!-- omit in toc -->
+## Declarative templating for ScriptUI/ExtendScript
 
 Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
 
