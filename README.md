@@ -8,8 +8,6 @@ Declarative templating for ScriptUI/ExtendScript
 
 </div>
 
----
-
 ## Overview
 
 Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
