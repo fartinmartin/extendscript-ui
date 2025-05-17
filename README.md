@@ -166,7 +166,7 @@ const MyText = ({ text, properties }) => {
 
 ## How?
 
-`extendscript-ui` uses a [custom `jsxFactory`](https://www.typescriptlang.org/tsconfig/#jsxFactory) to transform JSX into a [ScriptUI Resource Specifications](https://extendscript.docsforadobe.dev/user-interface-tools/resource-specifications.html)-compliant string. When you pass this string to `createWindow` it creates a new `Window` object using your compiled specification string. Then, `createWindow` will attach any event handlers (e.g. `onClick`, etc.) to their respective UI elements and run all of the side effect functions you passed to the `onWindow` "hook".
+`extendscript-ui` uses a [custom `jsxFactory`](https://www.typescriptlang.org/tsconfig/#jsxFactory) to transform JSX into a [ScriptUI Resource Specifications](https://extendscript.docsforadobe.dev/user-interface-tools/resource-specifications.html)-compliant string. When you pass your UI to `createWindow` it creates a new `Window` object using your compiled specification string. Then, it attaches any event handlers (e.g. `onClick`, etc.) to their respective UI elements and runs all of the side effect functions you passed to the `onWindow` "hook".
 
 ## TODO
 
