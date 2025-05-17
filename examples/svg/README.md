@@ -4,7 +4,7 @@
   <img src="example.png" width="300" alt="screenshot of svg palette"/>
 </p>
 
-This example renders a basic `Palette` with an SVG-like graphic. `extendscript-ui` lets us describe graphics using SVG-like syntax. We get syntax highlighting and type hinting thanks to the `jsx` factory function. Plus, since components are functions, we can create dynamic SVGs!
+This example renders a basic `Palette` with an SVG-like graphic. `extendscript-ui`'s JSX gives us SVG syntax highlighting and type hinting. Plus, since components are functions, we can create dynamic SVGs!
 
 <!-- prettier-ignore -->
 ```tsx
@@ -24,11 +24,11 @@ Under the hood, `extendscript-ui` uses [ScriptUI's graphic customization objects
 > [!NOTE]
 > `extendscript-ui` only supports a limited number of SVG elements and attributes. Documentation is coming, but for now you can check [the source](/src/jsx/elements/svg.ts)!
 
-You can swap the Smiley SVG with the SVGTestUI to see other SVG renders:
+You can swap the Smiley SVG with the SVGTestUI to see other (less fun) SVG renders:
 
 ```diff
 // src/index.tsx
-+ // const window = createWindow(ExampleUI);
+- const window = createWindow(ExampleUI);
 + const window = createWindow(SVGTestUI);
 ```
 

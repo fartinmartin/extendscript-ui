@@ -57,5 +57,4 @@ const ExampleUI = () => {
 };
 
 const window = createWindow(ExampleUI);
-// const window = createWindow(SVGTestUI);
 window.show();
