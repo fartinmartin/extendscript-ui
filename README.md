@@ -4,7 +4,7 @@
 
 Declarative templating for ScriptUI/ExtendScript
 
-![example windows](images/example.png)
+<img src="images/example.png" width="300" alt="example windows"/>
 
 </div>
 
