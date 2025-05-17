@@ -1,7 +1,6 @@
 /// <reference path="./jsx.d.ts" />
 
 import {
-	flat,
 	forEach,
 	includes,
 	isArray,
