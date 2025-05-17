@@ -1,4 +1,4 @@
-import { jsx, onWindow } from "extendscript-ui";
+import { jsx, onWindow, resolveState, resolveStyles } from "extendscript-ui";
 import { SVG, drawSVG } from "extendscript-ui";
 
 interface SVGTextProps {
@@ -42,19 +42,21 @@ export const ButtonUI = () => {
 				onClick={() => alert("Hello!")}
 				/* @ts-ignore onDraw does indeed pass `drawState`: https://github.com/docsforadobe/Types-for-Adobe/pull/147 */
 				onDraw={function (this: Button, drawState: DrawState) {
-					let state = "base";
-					if (drawState.mouseOver) state = "hover";
-					if (drawState.hasFocus) state = "focus";
-					if (drawState.leftButtonPressed) state = "active";
-					if (!enabled) state = "disabled";
+					const state = resolveState(drawState, () =>
+						!enabled ? "disabled" : null,
+					);
 
-					const styles = {
+					/*
+					 * since resolveStyles is generic, you could return SVG components directly!
+					 * here tho, we return a styles object that we then pass to our SVG component
+					 */
+					const styles = resolveStyles(state, {
 						base: { background: "plum", color: "blueviolet" },
 						hover: { background: "violet", color: "mediumorchid" },
 						focus: { background: "thistle", color: "indigo" },
 						active: { background: "mediumorchid", color: "indigo" },
 						disabled: { background: "lightgray", color: "gray" },
-					}[state]!;
+					});
 
 					drawSVG(SVGText({ text: "Hello!", ...styles }), this.graphics);
 				}}

@@ -2,17 +2,47 @@ import { map, reduce, trim } from "extendscript-ponyfills";
 import { parseColor } from "./colors";
 import { createCmds } from "./cmds";
 import { Anchor, getTextPosition } from "./text";
+import { Exclude } from "../lib/types";
 
 export function drawSVG(svg: string | XML, g: ScriptUIGraphics) {
 	const root = parseSVG(svg);
 	traverse(root, g);
 }
 
-/* Optional helper to suppress TypeScript complaining that your SVG component does not return a string. */
+/* Wrapper that suppresses TypeScript complaints that your SVG component does not return a string. */
 export function SVG<P>(
 	SVGComponent: (props: P) => JSX.Element,
 ): (props: P) => string {
 	return (props: P) => SVGComponent(props) as unknown as string;
+}
+
+type BaseState = "base" | "hover" | "focus" | "active";
+type StateUnion<Extra extends string = never> = BaseState | Extra;
+
+type Condition<S extends string> = (ds: DrawState) => S | null;
+
+/** Resolves the first matching state from a list of conditions */
+export function resolveState<Extra extends string = never>(
+	drawState: DrawState,
+	...conditions: Condition<StateUnion<Extra>>[]
+): StateUnion<Extra> {
+	for (const cond of conditions) {
+		const result = cond(drawState);
+		if (result) return result;
+	}
+	return "base";
+}
+
+type Styles<T, Extra extends string = never> = { base: T } & Partial<
+	Record<Exclude<StateUnion<Extra>, "base">, T>
+>;
+
+/** Returns the style value for a given state, falling back to base */
+export function resolveStyles<T, Extra extends string = never>(
+	state: StateUnion<Extra>,
+	styles: Styles<T, Extra>,
+): T {
+	return (styles[state as keyof typeof styles] ?? styles["base"]) as T;
 }
 
 //
