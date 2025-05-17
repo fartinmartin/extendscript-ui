@@ -1,6 +1,6 @@
 {
   "name": "@extendscript-ui/example-svg",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "main": "dist/index.jsx",
   "scripts": {
     "dev": "rollup -cw",
@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "extendscript-ponyfills": "^1.1.1",
-    "extendscript-ui": "0.0.10"
+    "extendscript-ui": "0.0.11"
   }
 }
