@@ -162,6 +162,7 @@ const MyText = ({ text, properties }) => {
 
 ## TODO
 
+- [ ] Set element's `size` based on `<svg width="100" height="100">`?
 - [ ] Move `properties` into `InstanceProps` props?
 - [ ] Default text nodes to `<static-text/>`? e.g `<button>hello!</button> === <button text="hello!"/>`
 - [ ] Figure out `TreeView | ListBox | DropDownList` rendering

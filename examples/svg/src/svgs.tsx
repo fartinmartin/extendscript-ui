@@ -1,5 +1,5 @@
-import { jsx, createWindow, onWindow } from "extendscript-ui";
-import { SVG, drawSVG, svgColors } from "extendscript-ui";
+import { jsx, onWindow } from "extendscript-ui";
+import { SVG, drawSVG } from "extendscript-ui";
 import { map } from "extendscript-ponyfills";
 
 const TestM = SVG(() => (
