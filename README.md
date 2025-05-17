@@ -1,9 +1,18 @@
+<div align="center">
+
 # `extendscript-ui`
 
-<p align="center">
-  <img src="images/example.png" width="300" alt="screenshot of svg palette"/>
-  ## Declarative templating for ScriptUI/ExtendScript
-</p>
+Declarative templating for ScriptUI/ExtendScript
+
+![example windows](images/example.png)
+
+---
+
+### [✨ Download eBox ✨](https://github.com/motiondeveloper/eBox/releases)<!-- omit in toc -->
+
+---
+
+</div>
 
 Have you ever wanted to compose [ScriptUI](https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html) with JSX, like so:
 
