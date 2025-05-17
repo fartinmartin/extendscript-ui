@@ -1,4 +1,4 @@
-import { map, reduce, trim } from "extendscript-ponyfills";
+import { filter, map, reduce, trim } from "extendscript-ponyfills";
 import { parseColor } from "./colors";
 import { createCmds } from "./cmds";
 import { Anchor, getTextPosition } from "./text";
@@ -16,33 +16,54 @@ export function SVG<P>(
 	return (props: P) => SVGComponent(props) as unknown as string;
 }
 
-type BaseState = "base" | "hover" | "focus" | "active";
+type BaseState = "base" | "hover" | "focus" | "active" | "modified";
 type StateUnion<Extra extends string = never> = BaseState | Extra;
 
 type Condition<S extends string> = (ds: DrawState) => S | null;
 
-/** Resolves the first matching state from a list of conditions */
+type Styles<T, Extra extends string = never> = { base: T } & Partial<
+	Record<Exclude<StateUnion<Extra>, "base">, T | (() => T)>
+>;
+
+/** Resolves the first matching state from built-in and custom conditions */
 export function resolveState<Extra extends string = never>(
 	drawState: DrawState,
 	...conditions: Condition<StateUnion<Extra>>[]
 ): StateUnion<Extra> {
-	for (const cond of conditions) {
+	const builtIn: Condition<BaseState>[] = [
+		(ds) =>
+			ds.leftButtonPressed || ds.middleButtonPressed || ds.rightButtonPressed
+				? "active"
+				: null,
+		(ds) => (ds.mouseOver ? "hover" : null),
+		(ds) => (ds.hasFocus ? "focus" : null),
+		(ds) =>
+			ds.altKeyPressed ||
+			ds.optKeyPressed ||
+			ds.cmdKeyPressed ||
+			ds.ctrlKeyPressed ||
+			ds.shiftKeyPressed ||
+			ds.capsLockKeyPressed ||
+			ds.numLockKeyPressed
+				? "modified"
+				: null,
+	];
+
+	for (const cond of [...conditions, ...builtIn]) {
 		const result = cond(drawState);
 		if (result) return result;
 	}
 	return "base";
 }
 
-type Styles<T, Extra extends string = never> = { base: T } & Partial<
-	Record<Exclude<StateUnion<Extra>, "base">, T>
->;
-
-/** Returns the style value for a given state, falling back to base */
+/** Resolves style by state; supports plain value or function returning value */
 export function resolveStyles<T, Extra extends string = never>(
 	state: StateUnion<Extra>,
 	styles: Styles<T, Extra>,
 ): T {
-	return (styles[state as keyof typeof styles] ?? styles["base"]) as T;
+	const style = styles[state as keyof typeof styles] ?? styles.base;
+	if (typeof style === "function") return (style as () => T)();
+	return style as T;
 }
 
 //

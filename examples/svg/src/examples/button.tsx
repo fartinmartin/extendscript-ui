@@ -52,13 +52,21 @@ export const ButtonUI = () => {
 					 */
 					const styles = resolveStyles(state, {
 						base: { background: "plum", color: "blueviolet" },
-						hover: { background: "violet", color: "mediumorchid" },
+						hover: () => {
+							if (drawState.altKeyPressed) {
+								// will work if altKey is pressed *before* mouse hovers... TBD on workaround?
+								return { background: "black", color: "white" };
+							} else {
+								return { background: "violet", color: "mediumorchid" };
+							}
+						},
 						focus: { background: "thistle", color: "indigo" },
 						active: { background: "mediumorchid", color: "indigo" },
+						modified: { background: "black", color: "white" },
 						disabled: { background: "lightgray", color: "gray" },
 					});
 
-					drawSVG(SVGText({ text: "Hello!", ...styles }), this.graphics);
+					drawSVG(SVGText({ text: state, ...styles }), this.graphics);
 				}}
 			></button>
 			<button

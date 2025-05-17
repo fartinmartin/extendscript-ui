@@ -51,5 +51,5 @@ const ExampleUI = () => {
 	);
 };
 
-const window = createWindow(ExampleUI);
+const window = createWindow(ButtonUI);
 window.show();
