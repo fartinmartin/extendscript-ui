@@ -4,13 +4,13 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  extendscript-ui: link:../../../../../Library/pnpm/global/5/node_modules/extendscript-ui
-
 importers:
 
   .:
     dependencies:
+      extendscript-ponyfills:
+        specifier: ^1.1.1
+        version: 1.1.1
       extendscript-ui:
         specifier: link:../../../../../Library/pnpm/global/5/node_modules/extendscript-ui
         version: link:../../../../../Library/pnpm/global/5/node_modules/extendscript-ui
@@ -180,6 +180,9 @@ packages:
   estree-walker@2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
 
+  extendscript-ponyfills@1.1.1:
+    resolution: {integrity: sha512-KPppfL9ITdMWQrCPe4zWgZzyYFdLEkI6YeSg4DDaMt200FMPxvV4snjApwpcQ/WMKuOyuUPRTEcg25Vu5C5LyQ==}
+
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -327,6 +330,8 @@ snapshots:
   deepmerge@4.3.1: {}
 
   estree-walker@2.0.2: {}
+
+  extendscript-ponyfills@1.1.1: {}
 
   fsevents@2.3.3:
     optional: true
