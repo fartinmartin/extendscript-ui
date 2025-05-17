@@ -11,11 +11,9 @@ This example renders a basic `Dialog` with several `Button`s grouped within two 
 The project uses [Rollup](https://rollupjs.org/) with as few dependencies and config as I could manage! It builds an IIFE to `dist/basic-v{#.#.#}.jsx` that you can run in **After Effects** via `File > Scripts > Run Script File...`
 
 > [!TIP]
-> Why an IIFE? Check out [hyperbrew](https://hyperbrew.co/blog/top-2-extendscript-mistakes-and-how-to-avoid-them/)'s post on global namespace pollution.
+> Why an IIFE? Check out [HyperBrew](https://hyperbrew.co/blog/top-2-extendscript-mistakes-and-how-to-avoid-them/)'s post on global namespace pollution.
 
-Here's a rundown of the dependencies:
-
-Rollup + TypeScript requires:
+Here's a rundown of the dependencies. To start, Rollup + TypeScript requires:
 
 - `@rollup/plugin-typescript`
 - `rollup`
@@ -23,13 +21,11 @@ Rollup + TypeScript requires:
 - `typescript`
 
 > [!NOTE]
-> TypeScript should be pinned to version `5.4.5`, the latest version with `target: "es3"` support, see https://github.com/microsoft/TypeScript/issues/51909. For more information on ExtendScript, check out HyperBrew's article on [Building Adobe Scripts](https://hyperbrew.co/blog/building-adobe-scripts/)!
+> TypeScript should be pinned to version `5.4.5`, which is the latest version with `target: "es3"` support, see https://github.com/microsoft/TypeScript/issues/51909. For more information on ExtendScript, check out HyperBrew's article on [Building Adobe Scripts](https://hyperbrew.co/blog/building-adobe-scripts/)!
 
 Additionally, in order to include `extendscript-ui` code in the output `.jsx` Rollup requires `@rollup/plugin-node-resolve`, see [Rollup docs](https://rollupjs.org/troubleshooting/#warning-treating-module-as-external-dependency).
 
-To get full type support for our host app, (e.g. things like After Effect's `alert`) we've installed `types-for-adobe`, and updated out `tsconfig.json`.
-
-Here's a complete rundown of the `tsconfig.json`:
+To get full type support for our host app, (e.g. for things like After Effect's `alert()`) we've installed `types-for-adobe`, and updated our `tsconfig.json`:
 
 <!-- prettier-ignore -->
 ```jsonc
