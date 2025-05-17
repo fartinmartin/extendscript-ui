@@ -24,12 +24,13 @@ Under the hood, `extendscript-ui` uses [ScriptUI's graphic customization objects
 > [!NOTE]
 > `extendscript-ui` only supports a limited number of SVG elements and attributes. Documentation is coming, but for now you can check [the source](/src/jsx/elements/svg.ts)!
 
-You can swap the Smiley SVG with the SVGTestUI to see other (less fun) SVG renders:
+You can swap the Smiley SVG with the SVGTestUI or ButtonUI to see other (less fun) SVG renders:
 
 ```diff
 // src/index.tsx
 - const window = createWindow(ExampleUI);
 + const window = createWindow(SVGTestUI);
++ const window = createWindow(ButtonUI);
 ```
 
 ## Development

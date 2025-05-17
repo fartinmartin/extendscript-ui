@@ -1,6 +1,7 @@
-import { jsx, createWindow, onWindow } from "extendscript-ui";
+import { jsx, createWindow } from "extendscript-ui";
 import { SVG, drawSVG, svgColors } from "extendscript-ui";
-import { SVGTestUI } from "./svgs";
+import { SVGTestUI } from "./examples/svgs";
+import { ButtonUI } from "./examples/button";
 
 const Smiley = SVG(({ fill, stroke }: { fill?: string; stroke?: string }) => {
 	const strokeWidth = 8;
@@ -35,12 +36,6 @@ function randomColor() {
 }
 
 const ExampleUI = () => {
-	onWindow((window) => {
-		window.onResize = window.onResizing = function () {
-			window.layout.resize();
-		};
-	});
-
 	return (
 		<palette text="SVG!" orientation="row">
 			<button
