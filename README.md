@@ -1,7 +1,7 @@
 # `extendscript-ui`
 
 <p align="center">
-  <img src="example.png" width="300" alt="screenshot of svg palette"/>
+  <img src="images/example.png" width="300" alt="screenshot of svg palette"/>
   ## Declarative templating for ScriptUI/ExtendScript
 </p>
 
