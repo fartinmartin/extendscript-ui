@@ -21,7 +21,7 @@ Here's a rundown of the dependencies. To start, Rollup + TypeScript requires:
 - `typescript`
 
 > [!NOTE]
-> TypeScript should be pinned to version `5.4.5`, which is the latest version with `target: "es3"` support, see https://github.com/microsoft/TypeScript/issues/51909. For more information on why we need to target ES2 for ExtendScript, check out HyperBrew's article on [Building Adobe Scripts](https://hyperbrew.co/blog/building-adobe-scripts/).
+> TypeScript should be pinned to version `5.4.5`, which is the latest version with `target: "es3"` support, see https://github.com/microsoft/TypeScript/issues/51909. For more information on why we need to target ES3 for ExtendScript, check out HyperBrew's article on [Building Adobe Scripts](https://hyperbrew.co/blog/building-adobe-scripts/).
 
 Additionally, in order to include `extendscript-ui` code in the output `.jsx` Rollup requires `@rollup/plugin-node-resolve`, see [Rollup docs](https://rollupjs.org/troubleshooting/#warning-treating-module-as-external-dependency).
 
